@@ -45,6 +45,9 @@ next-env.d.ts
 coverage/
 .nyc_output/
 
+# claude code local config
+.claude/
+
 # misc
 *.pem
 .vercel
