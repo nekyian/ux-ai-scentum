@@ -5,7 +5,9 @@
 :root {
   --bg: #f5f2ed;
   --bg-card: #faf8f5;
+  --bg-float: rgba(250, 248, 245, 0.88);
   --border: #e0dbd3;
+  --border-float: rgba(224, 219, 211, 0.55);
   --text: #1a1714;
   --text-muted: #7a736b;
   --accent: #8b6f52;
@@ -18,7 +20,9 @@
 .dark {
   --bg: #1c1814;
   --bg-card: #231f1a;
+  --bg-float: rgba(28, 24, 20, 0.90);
   --border: #38332d;
+  --border-float: rgba(56, 51, 45, 0.55);
   --text: #ede9e2;
   --text-muted: #8a8078;
   --accent: #c4a882;

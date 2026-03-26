@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import type { FilterState, ScoreVector } from '../types'
 import { countActiveFilters } from '../lib/filter'
 
@@ -16,6 +17,8 @@ type Props = {
   onChange: (f: FilterState) => void
   allAccords: string[]
   allTags: string[]
+  floated: boolean
+  onToggleFloat: () => void
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
@@ -121,7 +124,46 @@ function SliderRow({
   )
 }
 
-export function FilterPanel({ filters, onChange, allAccords, allTags }: Props) {
+const miniButtonStyle: React.CSSProperties = {
+  fontSize: '0.62rem',
+  color: 'var(--text-muted)',
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  padding: 0,
+  textDecoration: 'underline',
+  textUnderlineOffset: '2px',
+  fontFamily: 'inherit',
+}
+
+const floatColumnStyle: React.CSSProperties = {
+  width: '120px',
+  flexShrink: 0,
+  flex: 1,
+  minHeight: 0,
+  overflowY: 'auto',
+  background: 'var(--bg-float)',
+  backdropFilter: 'blur(20px) saturate(1.6)',
+  WebkitBackdropFilter: 'blur(20px) saturate(1.6)',
+  border: '1px solid var(--border-float)',
+  borderRadius: '4px',
+  boxShadow: '0 8px 32px rgba(0,0,0,0.08), 0 1px 0 var(--border-float)',
+  padding: '1rem 0.65rem',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 0,
+}
+
+const floatSectionTitle: React.CSSProperties = {
+  fontSize: '0.58rem',
+  letterSpacing: '0.12em',
+  textTransform: 'uppercase',
+  color: 'var(--text-muted)',
+  marginBottom: '0.6rem',
+  marginTop: 0,
+}
+
+export function FilterPanel({ filters, onChange, allAccords, allTags, floated, onToggleFloat }: Props) {
   const activeCount = countActiveFilters(filters)
 
   function toggleAccord(a: string) {
@@ -152,6 +194,156 @@ export function FilterPanel({ filters, onChange, allAccords, allTags }: Props) {
     onChange({ accords: [], tags: [], sliders: {}, rating: 0 })
   }
 
+  // ── Floated: 3 tall narrow columns ──────────────────────────────────────
+  if (floated) {
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          top: '64px',
+          left: '12px',
+          bottom: '12px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '6px',
+          zIndex: 100,
+        }}
+      >
+        {/* dock + clear row */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', paddingRight: '2px' }}>
+          {activeCount > 0 && (
+            <button onClick={reset} style={miniButtonStyle}>clear</button>
+          )}
+          <button onClick={onToggleFloat} style={{ ...miniButtonStyle, color: 'var(--text)' }}>dock</button>
+        </div>
+
+        {/* 3 columns */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, minHeight: 0 }}>
+
+          {/* Vibe */}
+          <div style={floatColumnStyle}>
+            <p style={floatSectionTitle}>Vibe</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {allTags.map(t => (
+                <button
+                  key={t}
+                  onClick={() => toggleTag(t)}
+                  style={{
+                    fontSize: '0.62rem',
+                    padding: '0.22rem 0.4rem',
+                    borderRadius: '2px',
+                    border: `1px solid ${filters.tags.includes(t) ? 'var(--chip-active)' : 'var(--border-float)'}`,
+                    background: filters.tags.includes(t) ? 'var(--chip-active)' : 'transparent',
+                    color: filters.tags.includes(t) ? 'var(--chip-active-text)' : 'var(--text-muted)',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    lineHeight: 1.35,
+                    letterSpacing: '0.02em',
+                    fontFamily: 'inherit',
+                    transition: 'all 0.15s ease',
+                    width: '100%',
+                  }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Accord */}
+          <div style={floatColumnStyle}>
+            <p style={floatSectionTitle}>Accord</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {allAccords.map(a => (
+                <button
+                  key={a}
+                  onClick={() => toggleAccord(a)}
+                  style={{
+                    fontSize: '0.62rem',
+                    padding: '0.22rem 0.4rem',
+                    borderRadius: '2px',
+                    border: `1px solid ${filters.accords.includes(a) ? 'var(--chip-active)' : 'var(--border-float)'}`,
+                    background: filters.accords.includes(a) ? 'var(--chip-active)' : 'transparent',
+                    color: filters.accords.includes(a) ? 'var(--chip-active-text)' : 'var(--text-muted)',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    lineHeight: 1.35,
+                    letterSpacing: '0.02em',
+                    fontFamily: 'inherit',
+                    transition: 'all 0.15s ease',
+                    width: '100%',
+                  }}
+                >
+                  {a}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Dimensions + Rating */}
+          <div style={floatColumnStyle}>
+            <p style={floatSectionTitle}>Dim.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+              {(Object.keys(SCORE_SLIDER_LABELS) as (keyof ScoreVector)[]).map(key => {
+                const [, high] = SCORE_SLIDER_LABELS[key]
+                const current = filters.sliders[key] ?? 0
+                return (
+                  <div key={key}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.58rem', color: current > 0 ? 'var(--text)' : 'var(--text-muted)', letterSpacing: '0.02em' }}>
+                        {high}
+                      </span>
+                      {current > 0 && (
+                        <button
+                          onClick={() => setSlider(key, undefined)}
+                          style={{ ...miniButtonStyle, fontSize: '0.55rem', textDecoration: 'none' }}
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                    <input
+                      type="range"
+                      min={0} max={1} step={0.05}
+                      value={current}
+                      onChange={e => {
+                        const v = parseFloat(e.target.value)
+                        setSlider(key, v === 0 ? undefined : v)
+                      }}
+                      style={{ width: '100%' }}
+                    />
+                    {current > 0 && (
+                      <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>
+                        ≥{Math.round(current * 100)}%
+                      </span>
+                    )}
+                  </div>
+                )
+              })}
+
+              {/* Rating */}
+              <div style={{ marginTop: '0.25rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-float)' }}>
+                <span style={{ fontSize: '0.58rem', color: 'var(--text-muted)', letterSpacing: '0.02em' }}>Rating</span>
+                <input
+                  type="range"
+                  min={0} max={5} step={0.5}
+                  value={filters.rating}
+                  onChange={e => onChange({ ...filters, rating: parseFloat(e.target.value) })}
+                  style={{ width: '100%', marginTop: '0.25rem' }}
+                />
+                {filters.rating > 0 && (
+                  <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>{filters.rating}+</span>
+                )}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    )
+  }
+
+  // ── Docked: standard sidebar ─────────────────────────────────────────────
   return (
     <aside
       style={{
@@ -188,23 +380,12 @@ export function FilterPanel({ filters, onChange, allAccords, allTags }: Props) {
             </span>
           )}
         </span>
-        {activeCount > 0 && (
-          <button
-            onClick={reset}
-            style={{
-              fontSize: '0.62rem',
-              color: 'var(--text-muted)',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 0,
-              textDecoration: 'underline',
-              textUnderlineOffset: '2px',
-            }}
-          >
-            clear
-          </button>
-        )}
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          {activeCount > 0 && (
+            <button onClick={reset} style={miniButtonStyle}>clear</button>
+          )}
+          <button onClick={onToggleFloat} style={miniButtonStyle}>float</button>
+        </div>
       </div>
 
       {/* Vibe / Tags */}
@@ -212,12 +393,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags }: Props) {
         <SectionTitle>Vibe</SectionTitle>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
           {allTags.map(t => (
-            <Chip
-              key={t}
-              label={t}
-              active={filters.tags.includes(t)}
-              onClick={() => toggleTag(t)}
-            />
+            <Chip key={t} label={t} active={filters.tags.includes(t)} onClick={() => toggleTag(t)} />
           ))}
         </div>
       </div>
@@ -227,12 +403,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags }: Props) {
         <SectionTitle>Accord</SectionTitle>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
           {allAccords.map(a => (
-            <Chip
-              key={a}
-              label={a}
-              active={filters.accords.includes(a)}
-              onClick={() => toggleAccord(a)}
-            />
+            <Chip key={a} label={a} active={filters.accords.includes(a)} onClick={() => toggleAccord(a)} />
           ))}
         </div>
       </div>
@@ -256,9 +427,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags }: Props) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <input
             type="range"
-            min={0}
-            max={5}
-            step={0.5}
+            min={0} max={5} step={0.5}
             value={filters.rating}
             onChange={e => onChange({ ...filters, rating: parseFloat(e.target.value) })}
             style={{ flex: 1 }}
