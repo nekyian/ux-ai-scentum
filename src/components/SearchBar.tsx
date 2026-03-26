@@ -148,18 +148,18 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
           background: 'var(--bg-float)',
           backdropFilter: 'blur(24px) saturate(1.8)',
           WebkitBackdropFilter: 'blur(24px) saturate(1.8)',
-          border: '1px solid var(--border-float)',
+          border: '2px solid var(--border)',
           borderRadius: '100px',
-          padding: '0.6rem 0.9rem 0.6rem 1.1rem',
+          padding: '0.85rem 1.1rem 0.85rem 1.4rem',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.5rem',
-          width: '440px',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.10), 0 1px 0 var(--border-float)',
+          gap: '0.65rem',
+          width: '560px',
+          boxShadow: '0 12px 40px rgba(0,0,0,0.13), 0 2px 0 var(--border)',
           cursor: 'text',
         }}
       >
-        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', flexShrink: 0, lineHeight: 1 }}>
+        <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)', flexShrink: 0, lineHeight: 1 }}>
           ⌕
         </span>
         <input
@@ -173,7 +173,7 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
             background: 'none',
             border: 'none',
             outline: 'none',
-            fontSize: '0.82rem',
+            fontSize: '0.95rem',
             color: 'var(--text)',
             fontFamily: 'inherit',
             letterSpacing: '0.02em',
@@ -189,7 +189,7 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
               padding: 0,
               lineHeight: 1,
               color: 'var(--text-muted)',
-              fontSize: '0.65rem',
+              fontSize: '0.75rem',
               fontFamily: 'inherit',
               flexShrink: 0,
             }}
