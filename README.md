@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # Scentum
 
 > A taste engine disguised as a shop.
@@ -263,5 +261,3 @@ gantt
 ---
 
 > The real product is the **translation layer between data and perception** — turning structured perfume data into a navigable aesthetic space.
->>>>>>> abde63d (first commit)
-# ux-ai-scentum
