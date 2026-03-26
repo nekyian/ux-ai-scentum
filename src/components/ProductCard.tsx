@@ -36,18 +36,21 @@ export function ProductCard({ perfume }: Props) {
           boxShadow: hovered ? '0 2px 12px rgba(0,0,0,0.06)' : 'none',
         }}
       >
-        {/* Image placeholder */}
-        <div
-          style={{
-            aspectRatio: '4/3',
-            background: 'var(--chip-bg)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-          }}
-        >
-          <span style={{ fontSize: '2rem', opacity: 0.15 }}>◈</span>
+        {/* Image */}
+        <div style={{ aspectRatio: '3/4', overflow: 'hidden', background: 'var(--chip-bg)' }}>
+          <img
+            src={perfume.imageUrls[0]}
+            alt={`${perfume.brand} ${perfume.name}`}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center top',
+              display: 'block',
+              transition: 'transform 0.4s ease',
+              transform: hovered ? 'scale(1.04)' : 'scale(1)',
+            }}
+          />
         </div>
 
         {/* Body */}
