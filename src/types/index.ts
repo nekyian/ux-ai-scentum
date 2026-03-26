@@ -35,6 +35,7 @@ export type FilterState = {
   tags: string[]
   sliders: Partial<ScoreVector>
   rating: number  // minimum rating threshold
+  query: string   // raw search input
 }
 
 export type RecommendContext = 'similar' | 'cheaper' | 'more-intense' | 'more-natural'

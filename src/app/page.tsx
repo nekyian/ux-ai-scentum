@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import { FilterPanel } from '../components/FilterPanel'
 import { ProductCard } from '../components/ProductCard'
+import { SearchBar } from '../components/SearchBar'
 import { perfumes, ALL_ACCORDS, ALL_TAGS } from '../data/perfumes'
 import { filterProducts, DEFAULT_FILTERS } from '../lib/filter'
 import type { FilterState, ScoreVector } from '../types'
@@ -49,7 +50,7 @@ export default function ListingPage() {
   const [floated, setFloated] = useState(false)
 
   const results = useMemo(
-    () => filterProducts(perfumes, filters),
+    () => filterProducts(perfumes, filters, ALL_ACCORDS, ALL_TAGS),
     [filters]
   )
 
@@ -89,7 +90,7 @@ export default function ListingPage() {
         onToggleFloat={() => setFloated(f => !f)}
       />
 
-      <main style={{ flex: 1, padding: '1.5rem 2rem', overflowY: 'auto', ...(floated && { paddingLeft: '116px' }) }}>
+      <main style={{ flex: 1, padding: '1.5rem 2rem 6rem', overflowY: 'auto', ...(floated && { paddingLeft: '116px' }) }}>
 
         {/* Status + active filter chips */}
         <div
@@ -161,6 +162,13 @@ export default function ListingPage() {
           </div>
         )}
       </main>
+
+      <SearchBar
+        filters={filters}
+        onChange={setFilters}
+        allAccords={ALL_ACCORDS}
+        allTags={ALL_TAGS}
+      />
     </div>
   )
 }

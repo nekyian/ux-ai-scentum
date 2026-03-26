@@ -191,7 +191,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
   }
 
   function reset() {
-    onChange({ accords: [], tags: [], sliders: {}, rating: 0 })
+    onChange({ accords: [], tags: [], sliders: {}, rating: 0, query: filters.query })
   }
 
   // ── Floated: 3 tall narrow columns ──────────────────────────────────────
