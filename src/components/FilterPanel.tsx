@@ -3,6 +3,15 @@
 import React from 'react'
 import type { FilterState, ScoreVector } from '../types'
 import { countActiveFilters } from '../lib/filter'
+import { Slider } from './ui/slider'
+import { Badge } from './ui/badge'
+import { Button } from './ui/button'
+import { Separator } from './ui/separator'
+import { ScrollArea } from './ui/scroll-area'
+import { cn } from '@/lib/utils'
+
+const val0 = (v: number | readonly number[]): number =>
+  Array.isArray(v) ? (v as readonly number[])[0] : (v as number)
 
 const SCORE_SLIDER_LABELS: Record<keyof ScoreVector, [string, string]> = {
   authenticity: ['Synthetic', 'Natural'],
@@ -21,47 +30,11 @@ type Props = {
   onToggleFloat: () => void
 }
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p style={{
-      fontSize: '0.62rem',
-      letterSpacing: '0.1em',
-      textTransform: 'uppercase',
-      color: 'var(--muted-foreground)',
-      marginBottom: '0.65rem',
-      marginTop: 0,
-    }}>
+    <p className="text-[0.62rem] uppercase tracking-[0.1em] text-muted-foreground mb-2.5 mt-0">
       {children}
     </p>
-  )
-}
-
-function Chip({
-  label,
-  active,
-  onClick,
-}: {
-  label: string
-  active: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        fontSize: '0.68rem',
-        padding: '0.25rem 0.6rem',
-        borderRadius: '1px',
-        border: `1px solid ${active ? 'var(--chip-active)' : 'var(--border)'}`,
-        background: active ? 'var(--chip-active)' : 'transparent',
-        color: active ? 'var(--chip-active-text)' : 'var(--muted-foreground)',
-        cursor: 'pointer',
-        transition: 'all 0.15s ease',
-        letterSpacing: '0.03em',
-      }}
-    >
-      {label}
-    </button>
   )
 }
 
@@ -78,43 +51,29 @@ function SliderRow({
   const current = value ?? 0
 
   return (
-    <div style={{ marginBottom: '1rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-        <span style={{ fontSize: '0.68rem', color: 'var(--muted-foreground)' }}>{low}</span>
-        <span style={{ fontSize: '0.68rem', color: current > 0 ? 'var(--foreground)' : 'var(--muted-foreground)' }}>
+    <div className="mb-4">
+      <div className="flex justify-between mb-2">
+        <span className="text-[0.68rem] text-muted-foreground">{low}</span>
+        <span className={cn('text-[0.68rem]', current > 0 ? 'text-foreground' : 'text-muted-foreground')}>
           {high}
           {current > 0 && (
-            <span style={{ marginLeft: '0.3rem', color: 'var(--muted-foreground)' }}>
-              ≥{Math.round(current * 100)}%
-            </span>
+            <span className="ml-1 text-muted-foreground">≥{Math.round(current * 100)}%</span>
           )}
         </span>
       </div>
-      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-        <input
-          type="range"
+      <div className="flex gap-2 items-center">
+        <Slider
+          value={[current]}
           min={0}
           max={1}
           step={0.05}
-          value={current}
-          onChange={e => {
-            const v = parseFloat(e.target.value)
-            onChange(v === 0 ? undefined : v)
-          }}
-          style={{ flex: 1 }}
+          onValueChange={(vals) => onChange(val0(vals) === 0 ? undefined : val0(vals))}
+          className="flex-1"
         />
         {current > 0 && (
           <button
             onClick={() => onChange(undefined)}
-            style={{
-              fontSize: '0.6rem',
-              color: 'var(--muted-foreground)',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '0',
-              lineHeight: 1,
-            }}
+            className="text-[0.6rem] text-muted-foreground hover:text-foreground transition-colors leading-none p-0 bg-transparent border-none cursor-pointer"
           >
             ✕
           </button>
@@ -122,18 +81,6 @@ function SliderRow({
       </div>
     </div>
   )
-}
-
-const miniButtonStyle: React.CSSProperties = {
-  fontSize: '0.62rem',
-  color: 'var(--muted-foreground)',
-  background: 'none',
-  border: 'none',
-  cursor: 'pointer',
-  padding: 0,
-  textDecoration: 'underline',
-  textUnderlineOffset: '2px',
-  fontFamily: 'inherit',
 }
 
 const floatColumnStyle: React.CSSProperties = {
@@ -152,15 +99,6 @@ const floatColumnStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   gap: 0,
-}
-
-const floatSectionTitle: React.CSSProperties = {
-  fontSize: '0.58rem',
-  letterSpacing: '0.12em',
-  textTransform: 'uppercase',
-  color: 'var(--muted-foreground)',
-  marginBottom: '0.6rem',
-  marginTop: 0,
 }
 
 export function FilterPanel({ filters, onChange, allAccords, allTags, floated, onToggleFloat }: Props) {
@@ -210,11 +148,15 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
         }}
       >
         {/* dock + clear row */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', paddingRight: '2px' }}>
+        <div className="flex justify-end gap-3 pr-0.5">
           {activeCount > 0 && (
-            <button onClick={reset} style={miniButtonStyle}>clear</button>
+            <Button variant="ghost" size="sm" onClick={reset} className="h-auto py-0.5 px-1.5 text-[0.62rem]">
+              clear
+            </Button>
           )}
-          <button onClick={onToggleFloat} style={{ ...miniButtonStyle, color: 'var(--foreground)' }}>dock</button>
+          <Button variant="ghost" size="sm" onClick={onToggleFloat} className="h-auto py-0.5 px-1.5 text-[0.62rem]">
+            dock
+          </Button>
         </div>
 
         {/* 3 columns */}
@@ -222,117 +164,89 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
 
           {/* Vibe */}
           <div style={floatColumnStyle}>
-            <p style={floatSectionTitle}>Vibe</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <p className="text-[0.58rem] uppercase tracking-[0.12em] text-muted-foreground mb-2.5 mt-0">Vibe</p>
+            <div className="flex flex-col gap-1">
               {allTags.map(t => (
-                <button
+                <Badge
                   key={t}
+                  variant={filters.tags.includes(t) ? 'default' : 'outline'}
+                  render={<button />}
                   onClick={() => toggleTag(t)}
-                  style={{
-                    fontSize: '0.62rem',
-                    padding: '0.22rem 0.4rem',
-                    borderRadius: '2px',
-                    border: `1px solid ${filters.tags.includes(t) ? 'var(--chip-active)' : 'var(--border-float)'}`,
-                    background: filters.tags.includes(t) ? 'var(--chip-active)' : 'transparent',
-                    color: filters.tags.includes(t) ? 'var(--chip-active-text)' : 'var(--muted-foreground)',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    lineHeight: 1.35,
-                    letterSpacing: '0.02em',
-                    fontFamily: 'inherit',
-                    transition: 'all 0.15s ease',
-                    width: '100%',
-                  }}
+                  className="cursor-pointer justify-start text-[0.62rem] h-auto py-1 px-2 rounded-sm w-full"
                 >
                   {t}
-                </button>
+                </Badge>
               ))}
             </div>
           </div>
 
           {/* Accord */}
           <div style={floatColumnStyle}>
-            <p style={floatSectionTitle}>Accord</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <p className="text-[0.58rem] uppercase tracking-[0.12em] text-muted-foreground mb-2.5 mt-0">Accord</p>
+            <div className="flex flex-col gap-1">
               {allAccords.map(a => (
-                <button
+                <Badge
                   key={a}
+                  variant={filters.accords.includes(a) ? 'default' : 'outline'}
+                  render={<button />}
                   onClick={() => toggleAccord(a)}
-                  style={{
-                    fontSize: '0.62rem',
-                    padding: '0.22rem 0.4rem',
-                    borderRadius: '2px',
-                    border: `1px solid ${filters.accords.includes(a) ? 'var(--chip-active)' : 'var(--border-float)'}`,
-                    background: filters.accords.includes(a) ? 'var(--chip-active)' : 'transparent',
-                    color: filters.accords.includes(a) ? 'var(--chip-active-text)' : 'var(--muted-foreground)',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    lineHeight: 1.35,
-                    letterSpacing: '0.02em',
-                    fontFamily: 'inherit',
-                    transition: 'all 0.15s ease',
-                    width: '100%',
-                  }}
+                  className="cursor-pointer justify-start text-[0.62rem] h-auto py-1 px-2 rounded-sm w-full"
                 >
                   {a}
-                </button>
+                </Badge>
               ))}
             </div>
           </div>
 
           {/* Dimensions + Rating */}
           <div style={floatColumnStyle}>
-            <p style={floatSectionTitle}>Dim.</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+            <p className="text-[0.58rem] uppercase tracking-[0.12em] text-muted-foreground mb-2.5 mt-0">Dim.</p>
+            <div className="flex flex-col gap-3.5">
               {(Object.keys(SCORE_SLIDER_LABELS) as (keyof ScoreVector)[]).map(key => {
                 const [, high] = SCORE_SLIDER_LABELS[key]
                 const current = filters.sliders[key] ?? 0
                 return (
                   <div key={key}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.25rem' }}>
-                      <span style={{ fontSize: '0.58rem', color: current > 0 ? 'var(--foreground)' : 'var(--muted-foreground)', letterSpacing: '0.02em' }}>
+                    <div className="flex justify-between items-baseline mb-1">
+                      <span className={cn('text-[0.58rem] tracking-[0.02em]', current > 0 ? 'text-foreground' : 'text-muted-foreground')}>
                         {high}
                       </span>
                       {current > 0 && (
                         <button
                           onClick={() => setSlider(key, undefined)}
-                          style={{ ...miniButtonStyle, fontSize: '0.55rem', textDecoration: 'none' }}
+                          className="text-[0.55rem] text-muted-foreground hover:text-foreground bg-transparent border-none cursor-pointer p-0 leading-none"
                         >
                           ✕
                         </button>
                       )}
                     </div>
-                    <input
-                      type="range"
-                      min={0} max={1} step={0.05}
-                      value={current}
-                      onChange={e => {
-                        const v = parseFloat(e.target.value)
-                        setSlider(key, v === 0 ? undefined : v)
-                      }}
-                      style={{ width: '100%' }}
+                    <Slider
+                      value={[current]}
+                      min={0}
+                      max={1}
+                      step={0.05}
+                      onValueChange={(vals) => setSlider(key, val0(vals) === 0 ? undefined : val0(vals))}
                     />
                     {current > 0 && (
-                      <span style={{ fontSize: '0.55rem', color: 'var(--muted-foreground)' }}>
-                        ≥{Math.round(current * 100)}%
-                      </span>
+                      <span className="text-[0.55rem] text-muted-foreground">≥{Math.round(current * 100)}%</span>
                     )}
                   </div>
                 )
               })}
 
               {/* Rating */}
-              <div style={{ marginTop: '0.25rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-float)' }}>
-                <span style={{ fontSize: '0.58rem', color: 'var(--muted-foreground)', letterSpacing: '0.02em' }}>Rating</span>
-                <input
-                  type="range"
-                  min={0} max={5} step={0.5}
-                  value={filters.rating}
-                  onChange={e => onChange({ ...filters, rating: parseFloat(e.target.value) })}
-                  style={{ width: '100%', marginTop: '0.25rem' }}
+              <div className="pt-3 border-t border-border/50">
+                <span className="text-[0.58rem] text-muted-foreground tracking-[0.02em]">Rating</span>
+                <Slider
+                  value={[filters.rating]}
+                  min={0}
+                  max={5}
+                  step={0.5}
+                  onValueChange={(vals) => onChange({ ...filters, rating: val0(vals) })}
+                  className="mt-1"
                 />
                 {filters.rating > 0 && (
-                  <span style={{ fontSize: '0.55rem', color: 'var(--muted-foreground)' }}>{filters.rating}+</span>
+                  <span className="text-[0.55rem] text-muted-foreground">{filters.rating}+</span>
                 )}
               </div>
             </div>
@@ -350,93 +264,113 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
         width: '220px',
         flexShrink: 0,
         borderRight: '1px solid var(--border)',
-        padding: '1.5rem 1.25rem',
-        overflowY: 'auto',
         position: 'sticky',
         top: '52px',
         height: 'calc(100vh - 52px)',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <span style={{ fontSize: '0.72rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          Filter
-          {activeCount > 0 && (
-            <span
-              style={{
-                marginLeft: '0.4rem',
-                background: 'var(--foreground)',
-                color: 'var(--background)',
-                borderRadius: '50%',
-                width: '16px',
-                height: '16px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '0.6rem',
-              }}
-            >
-              {activeCount}
+      <ScrollArea className="flex-1">
+        <div className="px-5 py-6">
+
+          {/* Header */}
+          <div className="flex justify-between items-center mb-6">
+            <span className="text-[0.72rem] tracking-[0.08em] uppercase">
+              Filter
+              {activeCount > 0 && (
+                <span className="ml-1.5 inline-flex items-center justify-center bg-foreground text-background rounded-full w-4 h-4 text-[0.6rem]">
+                  {activeCount}
+                </span>
+              )}
             </span>
-          )}
-        </span>
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          {activeCount > 0 && (
-            <button onClick={reset} style={miniButtonStyle}>clear</button>
-          )}
-          <button onClick={onToggleFloat} style={miniButtonStyle}>float</button>
-        </div>
-      </div>
+            <div className="flex gap-2 items-center">
+              {activeCount > 0 && (
+                <Button variant="ghost" size="sm" onClick={reset} className="h-auto py-0.5 px-1.5 text-[0.62rem] text-muted-foreground">
+                  clear
+                </Button>
+              )}
+              <Button variant="ghost" size="sm" onClick={onToggleFloat} className="h-auto py-0.5 px-1.5 text-[0.62rem] text-muted-foreground">
+                float
+              </Button>
+            </div>
+          </div>
 
-      {/* Vibe / Tags */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <SectionTitle>Vibe</SectionTitle>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-          {allTags.map(t => (
-            <Chip key={t} label={t} active={filters.tags.includes(t)} onClick={() => toggleTag(t)} />
-          ))}
-        </div>
-      </div>
+          {/* Vibe / Tags */}
+          <div className="mb-6">
+            <SectionLabel>Vibe</SectionLabel>
+            <div className="flex flex-wrap gap-1.5">
+              {allTags.map(t => (
+                <Badge
+                  key={t}
+                  variant={filters.tags.includes(t) ? 'default' : 'outline'}
+                  render={<button />}
+                  onClick={() => toggleTag(t)}
+                  className="cursor-pointer text-[0.68rem] h-auto py-1 px-2.5 rounded-sm"
+                >
+                  {t}
+                </Badge>
+              ))}
+            </div>
+          </div>
 
-      {/* Accords */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <SectionTitle>Accord</SectionTitle>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-          {allAccords.map(a => (
-            <Chip key={a} label={a} active={filters.accords.includes(a)} onClick={() => toggleAccord(a)} />
-          ))}
-        </div>
-      </div>
+          <Separator className="mb-6" />
 
-      {/* Dimensions */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <SectionTitle>Dimensions</SectionTitle>
-        {(Object.keys(SCORE_SLIDER_LABELS) as (keyof ScoreVector)[]).map(key => (
-          <SliderRow
-            key={key}
-            dimension={key}
-            value={filters.sliders[key]}
-            onChange={v => setSlider(key, v)}
-          />
-        ))}
-      </div>
+          {/* Accords */}
+          <div className="mb-6">
+            <SectionLabel>Accord</SectionLabel>
+            <div className="flex flex-wrap gap-1.5">
+              {allAccords.map(a => (
+                <Badge
+                  key={a}
+                  variant={filters.accords.includes(a) ? 'default' : 'outline'}
+                  render={<button />}
+                  onClick={() => toggleAccord(a)}
+                  className="cursor-pointer text-[0.68rem] h-auto py-1 px-2.5 rounded-sm"
+                >
+                  {a}
+                </Badge>
+              ))}
+            </div>
+          </div>
 
-      {/* Rating */}
-      <div>
-        <SectionTitle>Min Rating</SectionTitle>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <input
-            type="range"
-            min={0} max={5} step={0.5}
-            value={filters.rating}
-            onChange={e => onChange({ ...filters, rating: parseFloat(e.target.value) })}
-            style={{ flex: 1 }}
-          />
-          <span style={{ fontSize: '0.72rem', color: 'var(--muted-foreground)', width: '2rem' }}>
-            {filters.rating > 0 ? `${filters.rating}+` : '—'}
-          </span>
+          <Separator className="mb-6" />
+
+          {/* Dimensions */}
+          <div className="mb-6">
+            <SectionLabel>Dimensions</SectionLabel>
+            {(Object.keys(SCORE_SLIDER_LABELS) as (keyof ScoreVector)[]).map(key => (
+              <SliderRow
+                key={key}
+                dimension={key}
+                value={filters.sliders[key]}
+                onChange={v => setSlider(key, v)}
+              />
+            ))}
+          </div>
+
+          <Separator className="mb-6" />
+
+          {/* Rating */}
+          <div>
+            <SectionLabel>Min Rating</SectionLabel>
+            <div className="flex items-center gap-2">
+              <Slider
+                value={[filters.rating]}
+                min={0}
+                max={5}
+                step={0.5}
+                onValueChange={(vals) => onChange({ ...filters, rating: val0(vals) })}
+                className="flex-1"
+              />
+              <span className="text-[0.72rem] text-muted-foreground w-8 shrink-0">
+                {filters.rating > 0 ? `${filters.rating}+` : '—'}
+              </span>
+            </div>
+          </div>
+
         </div>
-      </div>
+      </ScrollArea>
     </aside>
   )
 }

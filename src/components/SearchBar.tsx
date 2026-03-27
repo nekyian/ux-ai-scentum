@@ -3,6 +3,8 @@
 import { useMemo, useRef } from 'react'
 import type { FilterState, ScoreVector } from '../types'
 import { parseQuery } from '../lib/filter'
+import { Badge } from './ui/badge'
+import { cn } from '@/lib/utils'
 
 type Props = {
   filters: FilterState
@@ -19,11 +21,11 @@ const SCORE_LABELS: Record<keyof ScoreVector, string> = {
   versatility: 'versatile',
 }
 
-const TOKEN_KIND_COLORS: Record<string, string> = {
-  accord: 'var(--foreground)',
-  tag: 'var(--accent)',
-  dim: 'var(--muted-foreground)',
-  name: 'var(--foreground)',
+const KIND_VARIANT: Record<string, 'default' | 'secondary' | 'outline'> = {
+  accord: 'secondary',
+  tag: 'default',
+  dim: 'outline',
+  name: 'outline',
 }
 
 function removeToken(query: string, token: string): string {
@@ -46,7 +48,6 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
   if (parsed) {
     parsed.accords.forEach(a => recognizedChips.push({ label: a, token: a, kind: 'accord' }))
     parsed.tags.forEach(t => {
-      // find the original token that triggered this tag
       const originalToken = filters.query
         .toLowerCase()
         .split(/\s+/)
@@ -60,82 +61,43 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
         .find(tok => tok === k || tok === SCORE_LABELS[k]) ?? k
       recognizedChips.push({ label: `${SCORE_LABELS[k]} ≥60%`, token: originalToken, kind: 'dim' })
     })
-    if (parsed.nameTokens.length > 0) {
-      parsed.nameTokens.forEach(t =>
-        recognizedChips.push({ label: t, token: t, kind: 'name' })
-      )
-    }
+    parsed.nameTokens.forEach(t =>
+      recognizedChips.push({ label: t, token: t, kind: 'name' })
+    )
   }
 
   const hasQuery = filters.query.trim().length > 0
 
   return (
     <div
-      style={{
-        position: 'fixed',
-        bottom: '2rem',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 200,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '0.45rem',
-        pointerEvents: 'none',
-      }}
+      className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[200] flex flex-col items-center gap-2 pointer-events-none"
     >
       {/* Recognized token chips */}
       {recognizedChips.length > 0 && (
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '0.3rem',
-            justifyContent: 'center',
-            maxWidth: '480px',
-            pointerEvents: 'auto',
-          }}
-        >
+        <div className="flex flex-wrap gap-1.5 justify-center max-w-[500px] pointer-events-auto">
           {recognizedChips.map((chip, i) => (
-            <span
+            <Badge
               key={i}
+              variant={KIND_VARIANT[chip.kind]}
+              className={cn(
+                'gap-1 text-[0.65rem] h-auto py-1 pl-2.5 pr-1.5 rounded-full font-normal',
+                'backdrop-blur-md shadow-sm'
+              )}
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.25rem',
-                fontSize: '0.65rem',
-                padding: '0.18rem 0.4rem 0.18rem 0.55rem',
                 background: 'var(--bg-float)',
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
-                border: `1px solid var(--border-float)`,
-                borderRadius: '100px',
-                color: TOKEN_KIND_COLORS[chip.kind],
-                letterSpacing: '0.04em',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
               }}
             >
-              {chip.kind === 'accord' && <span style={{ color: 'var(--muted-foreground)', fontSize: '0.58rem' }}>accord</span>}
-              {chip.kind === 'tag' && <span style={{ color: 'var(--muted-foreground)', fontSize: '0.58rem' }}>vibe</span>}
-              {chip.kind === 'dim' && <span style={{ color: 'var(--muted-foreground)', fontSize: '0.58rem' }}>dim</span>}
-              {chip.kind === 'name' && <span style={{ color: 'var(--muted-foreground)', fontSize: '0.58rem' }}>name</span>}
+              <span className="text-muted-foreground text-[0.58rem]">{chip.kind}</span>
               {chip.label}
               <button
                 onClick={() => onChange({ ...filters, query: removeToken(filters.query, chip.token) })}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: 0,
-                  lineHeight: 1,
-                  color: 'var(--muted-foreground)',
-                  fontSize: '0.55rem',
-                  fontFamily: 'inherit',
-                }}
+                className="text-muted-foreground hover:text-foreground bg-transparent border-none cursor-pointer p-0 leading-none text-[0.55rem] transition-colors"
               >
                 ✕
               </button>
-            </span>
+            </Badge>
           ))}
         </div>
       )}
@@ -143,56 +105,31 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
       {/* Input bar */}
       <div
         onClick={() => inputRef.current?.focus()}
+        className="pointer-events-auto flex items-center gap-3 rounded-full cursor-text"
         style={{
-          pointerEvents: 'auto',
           background: 'var(--bg-float)',
           backdropFilter: 'blur(24px) saturate(1.8)',
           WebkitBackdropFilter: 'blur(24px) saturate(1.8)',
           border: '2px solid var(--border)',
           borderRadius: '100px',
           padding: '0.85rem 1.1rem 0.85rem 1.4rem',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.65rem',
           width: '560px',
           boxShadow: '0 12px 40px rgba(0,0,0,0.13), 0 2px 0 var(--border)',
-          cursor: 'text',
         }}
       >
-        <span style={{ fontSize: '0.95rem', color: 'var(--muted-foreground)', flexShrink: 0, lineHeight: 1 }}>
-          ⌕
-        </span>
+        <span className="text-muted-foreground text-base shrink-0 leading-none">⌕</span>
         <input
           ref={inputRef}
           type="text"
           value={filters.query}
           onChange={e => onChange({ ...filters, query: e.target.value })}
           placeholder="woody · romantic · Chanel · lasting..."
-          style={{
-            flex: 1,
-            background: 'none',
-            border: 'none',
-            outline: 'none',
-            fontSize: '0.95rem',
-            color: 'var(--foreground)',
-            fontFamily: 'inherit',
-            letterSpacing: '0.02em',
-          }}
+          className="flex-1 bg-transparent border-none outline-none text-[0.95rem] text-foreground font-[inherit] tracking-[0.02em] placeholder:text-muted-foreground"
         />
         {hasQuery && (
           <button
             onClick={() => onChange({ ...filters, query: '' })}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 0,
-              lineHeight: 1,
-              color: 'var(--muted-foreground)',
-              fontSize: '0.75rem',
-              fontFamily: 'inherit',
-              flexShrink: 0,
-            }}
+            className="text-muted-foreground hover:text-foreground bg-transparent border-none cursor-pointer p-0 leading-none text-[0.75rem] shrink-0 transition-colors font-[inherit]"
           >
             ✕
           </button>

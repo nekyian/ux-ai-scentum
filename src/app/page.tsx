@@ -6,42 +6,23 @@ import { ProductCard } from '../components/ProductCard'
 import { SearchBar } from '../components/SearchBar'
 import { perfumes, ALL_ACCORDS, ALL_TAGS } from '../data/perfumes'
 import { filterProducts, DEFAULT_FILTERS } from '../lib/filter'
+import { Badge } from '../components/ui/badge'
 import type { FilterState, ScoreVector } from '../types'
 
 function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '0.3rem',
-        fontSize: '0.65rem',
-        padding: '0.18rem 0.35rem 0.18rem 0.5rem',
-        border: '1px solid var(--border)',
-        borderRadius: '1px',
-        color: 'var(--foreground)',
-        background: 'var(--chip-bg)',
-        letterSpacing: '0.03em',
-        whiteSpace: 'nowrap',
-      }}
+    <Badge
+      variant="secondary"
+      className="gap-1 text-[0.65rem] h-auto py-0.5 pl-2.5 pr-1.5 rounded-sm font-normal cursor-default whitespace-nowrap"
     >
       {label}
       <button
         onClick={onRemove}
-        style={{
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          padding: 0,
-          lineHeight: 1,
-          color: 'var(--muted-foreground)',
-          fontSize: '0.58rem',
-          fontFamily: 'inherit',
-        }}
+        className="ml-0.5 text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer p-0 leading-none text-[0.58rem]"
       >
         ✕
       </button>
-    </span>
+    </Badge>
   )
 }
 

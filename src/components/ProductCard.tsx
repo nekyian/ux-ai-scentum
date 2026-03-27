@@ -4,6 +4,9 @@ import { useState } from 'react'
 import Link from 'next/link'
 import type { Perfume } from '../types'
 import { ScoreBarInline } from './ScoreBadges'
+import { Card, CardContent } from './ui/card'
+import { Badge } from './ui/badge'
+import { cn } from '@/lib/utils'
 
 function interpretiveSentence(p: Perfume): string {
   const projection = p.scores.projection > 0.65 ? 'projecting' : p.scores.projection < 0.4 ? 'intimate' : 'balanced'
@@ -24,20 +27,16 @@ export function ProductCard({ perfume }: Props) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <article
-        style={{
-          background: 'var(--card)',
-          border: '1px solid var(--border)',
-          borderRadius: '2px',
-          overflow: 'hidden',
-          cursor: 'pointer',
-          transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-          borderColor: hovered ? 'var(--muted-foreground)' : 'var(--border)',
-          boxShadow: hovered ? '0 2px 12px rgba(0,0,0,0.06)' : 'none',
-        }}
+      <Card
+        className={cn(
+          'gap-0 rounded-sm py-0 transition-all duration-200 cursor-pointer',
+          hovered
+            ? 'ring-foreground/30 shadow-md'
+            : 'ring-foreground/10 shadow-none'
+        )}
       >
         {/* Image */}
-        <div style={{ aspectRatio: '3/4', overflow: 'hidden', background: 'var(--chip-bg)' }}>
+        <div style={{ aspectRatio: '3/4', overflow: 'hidden', background: 'var(--chip-bg)', borderRadius: '2px 2px 0 0' }}>
           <img
             src={perfume.imageUrls[0]}
             alt={`${perfume.brand} ${perfume.name}`}
@@ -54,33 +53,23 @@ export function ProductCard({ perfume }: Props) {
         </div>
 
         {/* Body */}
-        <div style={{ padding: '0.9rem 1rem 1rem' }}>
+        <CardContent className="pt-3.5 pb-4 px-4">
           {/* Brand + Name */}
-          <div style={{ marginBottom: '0.5rem' }}>
-            <p style={{ fontSize: '0.68rem', color: 'var(--muted-foreground)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.15rem' }}>
+          <div className="mb-2">
+            <p className="text-[0.68rem] text-muted-foreground tracking-[0.08em] uppercase mb-0.5">
               {perfume.brand}
             </p>
-            <h3 style={{ fontSize: '0.95rem', fontWeight: 400, margin: 0, lineHeight: 1.3 }}>
+            <h3 className="text-[0.95rem] font-normal m-0 leading-snug">
               {perfume.name}
             </h3>
           </div>
 
           {/* Accords */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', marginBottom: '0.7rem' }}>
+          <div className="flex flex-wrap gap-1 mb-2.5">
             {perfume.accords.slice(0, 3).map(a => (
-              <span
-                key={a}
-                style={{
-                  fontSize: '0.65rem',
-                  color: 'var(--muted-foreground)',
-                  background: 'var(--chip-bg)',
-                  padding: '0.15rem 0.45rem',
-                  borderRadius: '1px',
-                  letterSpacing: '0.04em',
-                }}
-              >
+              <Badge key={a} variant="secondary" className="text-[0.65rem] h-auto py-0.5 px-2 rounded-sm font-normal">
                 {a}
-              </span>
+              </Badge>
             ))}
           </div>
 
@@ -88,47 +77,36 @@ export function ProductCard({ perfume }: Props) {
           <ScoreBarInline scores={perfume.scores} limit={3} />
 
           {/* Hover interpretive line */}
-          <div
-            style={{
-              marginTop: '0.65rem',
-              fontSize: '0.72rem',
-              color: 'var(--muted-foreground)',
-              fontStyle: 'italic',
-              opacity: hovered ? 1 : 0,
-              transform: hovered ? 'translateY(0)' : 'translateY(4px)',
-              transition: 'opacity 0.2s ease, transform 0.2s ease',
-            }}
+          <p
+            className={cn(
+              'mt-2.5 text-[0.72rem] text-muted-foreground italic transition-all duration-200',
+              hovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'
+            )}
           >
             &ldquo;{interpretiveSentence(perfume)}&rdquo;
-          </div>
+          </p>
 
           {/* Tags + Price */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: '0.75rem' }}>
-            <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
+          <div className="flex justify-between items-end mt-3">
+            <div className="flex gap-1 flex-wrap">
               {perfume.tags.slice(0, 2).map(t => (
-                <span
+                <Badge
                   key={t}
-                  style={{
-                    fontSize: '0.6rem',
-                    color: 'var(--accent)',
-                    border: '1px solid var(--accent-light)',
-                    padding: '0.1rem 0.4rem',
-                    borderRadius: '1px',
-                    letterSpacing: '0.04em',
-                  }}
+                  variant="outline"
+                  className="text-[0.6rem] h-auto py-0.5 px-2 rounded-sm font-normal border-accent-light text-accent"
                 >
                   {t}
-                </span>
+                </Badge>
               ))}
             </div>
             {perfume.price && (
-              <span style={{ fontSize: '0.78rem', color: 'var(--muted-foreground)' }}>
+              <span className="text-[0.78rem] text-muted-foreground">
                 ${perfume.price}
               </span>
             )}
           </div>
-        </div>
-      </article>
+        </CardContent>
+      </Card>
     </Link>
   )
 }
