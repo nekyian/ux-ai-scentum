@@ -15,7 +15,7 @@ export function ThemeToggle() {
         border: '1px solid var(--border)',
         borderRadius: '2px',
         cursor: 'pointer',
-        color: 'var(--text-muted)',
+        color: 'var(--muted-foreground)',
         width: '30px',
         height: '30px',
         display: 'flex',

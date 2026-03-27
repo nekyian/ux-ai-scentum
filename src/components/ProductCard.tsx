@@ -26,13 +26,13 @@ export function ProductCard({ perfume }: Props) {
     >
       <article
         style={{
-          background: 'var(--bg-card)',
+          background: 'var(--card)',
           border: '1px solid var(--border)',
           borderRadius: '2px',
           overflow: 'hidden',
           cursor: 'pointer',
           transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-          borderColor: hovered ? 'var(--text-muted)' : 'var(--border)',
+          borderColor: hovered ? 'var(--muted-foreground)' : 'var(--border)',
           boxShadow: hovered ? '0 2px 12px rgba(0,0,0,0.06)' : 'none',
         }}
       >
@@ -57,7 +57,7 @@ export function ProductCard({ perfume }: Props) {
         <div style={{ padding: '0.9rem 1rem 1rem' }}>
           {/* Brand + Name */}
           <div style={{ marginBottom: '0.5rem' }}>
-            <p style={{ fontSize: '0.68rem', color: 'var(--text-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.15rem' }}>
+            <p style={{ fontSize: '0.68rem', color: 'var(--muted-foreground)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.15rem' }}>
               {perfume.brand}
             </p>
             <h3 style={{ fontSize: '0.95rem', fontWeight: 400, margin: 0, lineHeight: 1.3 }}>
@@ -72,7 +72,7 @@ export function ProductCard({ perfume }: Props) {
                 key={a}
                 style={{
                   fontSize: '0.65rem',
-                  color: 'var(--text-muted)',
+                  color: 'var(--muted-foreground)',
                   background: 'var(--chip-bg)',
                   padding: '0.15rem 0.45rem',
                   borderRadius: '1px',
@@ -92,7 +92,7 @@ export function ProductCard({ perfume }: Props) {
             style={{
               marginTop: '0.65rem',
               fontSize: '0.72rem',
-              color: 'var(--text-muted)',
+              color: 'var(--muted-foreground)',
               fontStyle: 'italic',
               opacity: hovered ? 1 : 0,
               transform: hovered ? 'translateY(0)' : 'translateY(4px)',
@@ -122,7 +122,7 @@ export function ProductCard({ perfume }: Props) {
               ))}
             </div>
             {perfume.price && (
-              <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+              <span style={{ fontSize: '0.78rem', color: 'var(--muted-foreground)' }}>
                 ${perfume.price}
               </span>
             )}

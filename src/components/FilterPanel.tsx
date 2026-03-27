@@ -27,7 +27,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
       fontSize: '0.62rem',
       letterSpacing: '0.1em',
       textTransform: 'uppercase',
-      color: 'var(--text-muted)',
+      color: 'var(--muted-foreground)',
       marginBottom: '0.65rem',
       marginTop: 0,
     }}>
@@ -54,7 +54,7 @@ function Chip({
         borderRadius: '1px',
         border: `1px solid ${active ? 'var(--chip-active)' : 'var(--border)'}`,
         background: active ? 'var(--chip-active)' : 'transparent',
-        color: active ? 'var(--chip-active-text)' : 'var(--text-muted)',
+        color: active ? 'var(--chip-active-text)' : 'var(--muted-foreground)',
         cursor: 'pointer',
         transition: 'all 0.15s ease',
         letterSpacing: '0.03em',
@@ -80,11 +80,11 @@ function SliderRow({
   return (
     <div style={{ marginBottom: '1rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-        <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{low}</span>
-        <span style={{ fontSize: '0.68rem', color: current > 0 ? 'var(--text)' : 'var(--text-muted)' }}>
+        <span style={{ fontSize: '0.68rem', color: 'var(--muted-foreground)' }}>{low}</span>
+        <span style={{ fontSize: '0.68rem', color: current > 0 ? 'var(--foreground)' : 'var(--muted-foreground)' }}>
           {high}
           {current > 0 && (
-            <span style={{ marginLeft: '0.3rem', color: 'var(--text-muted)' }}>
+            <span style={{ marginLeft: '0.3rem', color: 'var(--muted-foreground)' }}>
               ≥{Math.round(current * 100)}%
             </span>
           )}
@@ -108,7 +108,7 @@ function SliderRow({
             onClick={() => onChange(undefined)}
             style={{
               fontSize: '0.6rem',
-              color: 'var(--text-muted)',
+              color: 'var(--muted-foreground)',
               background: 'none',
               border: 'none',
               cursor: 'pointer',
@@ -126,7 +126,7 @@ function SliderRow({
 
 const miniButtonStyle: React.CSSProperties = {
   fontSize: '0.62rem',
-  color: 'var(--text-muted)',
+  color: 'var(--muted-foreground)',
   background: 'none',
   border: 'none',
   cursor: 'pointer',
@@ -158,7 +158,7 @@ const floatSectionTitle: React.CSSProperties = {
   fontSize: '0.58rem',
   letterSpacing: '0.12em',
   textTransform: 'uppercase',
-  color: 'var(--text-muted)',
+  color: 'var(--muted-foreground)',
   marginBottom: '0.6rem',
   marginTop: 0,
 }
@@ -214,7 +214,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
           {activeCount > 0 && (
             <button onClick={reset} style={miniButtonStyle}>clear</button>
           )}
-          <button onClick={onToggleFloat} style={{ ...miniButtonStyle, color: 'var(--text)' }}>dock</button>
+          <button onClick={onToggleFloat} style={{ ...miniButtonStyle, color: 'var(--foreground)' }}>dock</button>
         </div>
 
         {/* 3 columns */}
@@ -234,7 +234,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
                     borderRadius: '2px',
                     border: `1px solid ${filters.tags.includes(t) ? 'var(--chip-active)' : 'var(--border-float)'}`,
                     background: filters.tags.includes(t) ? 'var(--chip-active)' : 'transparent',
-                    color: filters.tags.includes(t) ? 'var(--chip-active-text)' : 'var(--text-muted)',
+                    color: filters.tags.includes(t) ? 'var(--chip-active-text)' : 'var(--muted-foreground)',
                     cursor: 'pointer',
                     textAlign: 'left',
                     lineHeight: 1.35,
@@ -264,7 +264,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
                     borderRadius: '2px',
                     border: `1px solid ${filters.accords.includes(a) ? 'var(--chip-active)' : 'var(--border-float)'}`,
                     background: filters.accords.includes(a) ? 'var(--chip-active)' : 'transparent',
-                    color: filters.accords.includes(a) ? 'var(--chip-active-text)' : 'var(--text-muted)',
+                    color: filters.accords.includes(a) ? 'var(--chip-active-text)' : 'var(--muted-foreground)',
                     cursor: 'pointer',
                     textAlign: 'left',
                     lineHeight: 1.35,
@@ -290,7 +290,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
                 return (
                   <div key={key}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.25rem' }}>
-                      <span style={{ fontSize: '0.58rem', color: current > 0 ? 'var(--text)' : 'var(--text-muted)', letterSpacing: '0.02em' }}>
+                      <span style={{ fontSize: '0.58rem', color: current > 0 ? 'var(--foreground)' : 'var(--muted-foreground)', letterSpacing: '0.02em' }}>
                         {high}
                       </span>
                       {current > 0 && (
@@ -313,7 +313,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
                       style={{ width: '100%' }}
                     />
                     {current > 0 && (
-                      <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>
+                      <span style={{ fontSize: '0.55rem', color: 'var(--muted-foreground)' }}>
                         ≥{Math.round(current * 100)}%
                       </span>
                     )}
@@ -323,7 +323,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
 
               {/* Rating */}
               <div style={{ marginTop: '0.25rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-float)' }}>
-                <span style={{ fontSize: '0.58rem', color: 'var(--text-muted)', letterSpacing: '0.02em' }}>Rating</span>
+                <span style={{ fontSize: '0.58rem', color: 'var(--muted-foreground)', letterSpacing: '0.02em' }}>Rating</span>
                 <input
                   type="range"
                   min={0} max={5} step={0.5}
@@ -332,7 +332,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
                   style={{ width: '100%', marginTop: '0.25rem' }}
                 />
                 {filters.rating > 0 && (
-                  <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>{filters.rating}+</span>
+                  <span style={{ fontSize: '0.55rem', color: 'var(--muted-foreground)' }}>{filters.rating}+</span>
                 )}
               </div>
             </div>
@@ -365,8 +365,8 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
             <span
               style={{
                 marginLeft: '0.4rem',
-                background: 'var(--text)',
-                color: 'var(--bg)',
+                background: 'var(--foreground)',
+                color: 'var(--background)',
                 borderRadius: '50%',
                 width: '16px',
                 height: '16px',
@@ -432,7 +432,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
             onChange={e => onChange({ ...filters, rating: parseFloat(e.target.value) })}
             style={{ flex: 1 }}
           />
-          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', width: '2rem' }}>
+          <span style={{ fontSize: '0.72rem', color: 'var(--muted-foreground)', width: '2rem' }}>
             {filters.rating > 0 ? `${filters.rating}+` : '—'}
           </span>
         </div>

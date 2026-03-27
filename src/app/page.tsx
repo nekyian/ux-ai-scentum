@@ -19,7 +19,7 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
         padding: '0.18rem 0.35rem 0.18rem 0.5rem',
         border: '1px solid var(--border)',
         borderRadius: '1px',
-        color: 'var(--text)',
+        color: 'var(--foreground)',
         background: 'var(--chip-bg)',
         letterSpacing: '0.03em',
         whiteSpace: 'nowrap',
@@ -34,7 +34,7 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
           cursor: 'pointer',
           padding: 0,
           lineHeight: 1,
-          color: 'var(--text-muted)',
+          color: 'var(--muted-foreground)',
           fontSize: '0.58rem',
           fontFamily: 'inherit',
         }}
@@ -103,7 +103,7 @@ export default function ListingPage() {
             ...topbarStyle,
           }}
         >
-          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginRight: '0.25rem', flexShrink: 0 }}>
+          <span style={{ fontSize: '0.72rem', color: 'var(--muted-foreground)', marginRight: '0.25rem', flexShrink: 0 }}>
             {results.length} {results.length === 1 ? 'perfume' : 'perfumes'}
             {results.length < perfumes.length && (
               <span style={{ fontStyle: 'italic' }}> · filtered from {perfumes.length}</span>
@@ -153,7 +153,7 @@ export default function ListingPage() {
             style={{
               padding: '4rem 0',
               textAlign: 'center',
-              color: 'var(--text-muted)',
+              color: 'var(--muted-foreground)',
               fontSize: '0.85rem',
               fontStyle: 'italic',
             }}

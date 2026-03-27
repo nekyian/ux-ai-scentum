@@ -20,10 +20,10 @@ const SCORE_LABELS: Record<keyof ScoreVector, string> = {
 }
 
 const TOKEN_KIND_COLORS: Record<string, string> = {
-  accord: 'var(--text)',
+  accord: 'var(--foreground)',
   tag: 'var(--accent)',
-  dim: 'var(--text-muted)',
-  name: 'var(--text)',
+  dim: 'var(--muted-foreground)',
+  name: 'var(--foreground)',
 }
 
 function removeToken(query: string, token: string): string {
@@ -115,10 +115,10 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
                 boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
               }}
             >
-              {chip.kind === 'accord' && <span style={{ color: 'var(--text-muted)', fontSize: '0.58rem' }}>accord</span>}
-              {chip.kind === 'tag' && <span style={{ color: 'var(--text-muted)', fontSize: '0.58rem' }}>vibe</span>}
-              {chip.kind === 'dim' && <span style={{ color: 'var(--text-muted)', fontSize: '0.58rem' }}>dim</span>}
-              {chip.kind === 'name' && <span style={{ color: 'var(--text-muted)', fontSize: '0.58rem' }}>name</span>}
+              {chip.kind === 'accord' && <span style={{ color: 'var(--muted-foreground)', fontSize: '0.58rem' }}>accord</span>}
+              {chip.kind === 'tag' && <span style={{ color: 'var(--muted-foreground)', fontSize: '0.58rem' }}>vibe</span>}
+              {chip.kind === 'dim' && <span style={{ color: 'var(--muted-foreground)', fontSize: '0.58rem' }}>dim</span>}
+              {chip.kind === 'name' && <span style={{ color: 'var(--muted-foreground)', fontSize: '0.58rem' }}>name</span>}
               {chip.label}
               <button
                 onClick={() => onChange({ ...filters, query: removeToken(filters.query, chip.token) })}
@@ -128,7 +128,7 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
                   cursor: 'pointer',
                   padding: 0,
                   lineHeight: 1,
-                  color: 'var(--text-muted)',
+                  color: 'var(--muted-foreground)',
                   fontSize: '0.55rem',
                   fontFamily: 'inherit',
                 }}
@@ -159,7 +159,7 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
           cursor: 'text',
         }}
       >
-        <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)', flexShrink: 0, lineHeight: 1 }}>
+        <span style={{ fontSize: '0.95rem', color: 'var(--muted-foreground)', flexShrink: 0, lineHeight: 1 }}>
           ⌕
         </span>
         <input
@@ -174,7 +174,7 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
             border: 'none',
             outline: 'none',
             fontSize: '0.95rem',
-            color: 'var(--text)',
+            color: 'var(--foreground)',
             fontFamily: 'inherit',
             letterSpacing: '0.02em',
           }}
@@ -188,7 +188,7 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
               cursor: 'pointer',
               padding: 0,
               lineHeight: 1,
-              color: 'var(--text-muted)',
+              color: 'var(--muted-foreground)',
               fontSize: '0.75rem',
               fontFamily: 'inherit',
               flexShrink: 0,
