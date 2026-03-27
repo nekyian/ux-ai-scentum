@@ -7,11 +7,8 @@ import { NoteCloud } from '@/components/NoteCloud'
 import { CommunitySignal } from '@/components/CommunitySignal'
 import { ProductCard } from '@/components/ProductCard'
 import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import type { ScoreVector } from '@/types'
 
-// Catalogue average scores — computed once at module level
 const avgScores: ScoreVector = (() => {
   const keys = ['authenticity', 'projection', 'longevity', 'complexity', 'versatility'] as (keyof ScoreVector)[]
   const result = {} as ScoreVector
@@ -35,188 +32,150 @@ export default async function ProductPage({ params }: Props) {
   const similar = getSimilar(perfume, perfumes, 6)
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 52px)', background: 'var(--background)' }}>
+    // Tailwind responsive grid: single col mobile → 2-col desktop
+    <div className="grid md:grid-cols-[300px_1fr] min-h-[calc(100vh-52px)]">
 
-      {/* ── Hero ──────────────────────────────────────────────────────── */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '380px 1fr',
-        minHeight: '72vh',
-        borderBottom: '1px solid var(--border)',
-      }}>
+      {/* ── Sticky image — desktop only ───────────────────────────────── */}
+      <div className="hidden md:flex sticky top-[52px] h-[calc(100vh-52px)] items-center justify-center overflow-hidden border-r border-border"
+        style={{ background: 'var(--chip-bg)' }}>
+        <img
+          src={perfume.imageUrls[0]}
+          alt={`${perfume.brand} ${perfume.name}`}
+          className="w-full h-full object-contain p-10"
+        />
+      </div>
 
-        {/* Image column */}
-        <div style={{
-          position: 'sticky',
-          top: '52px',
-          height: 'calc(100vh - 52px)',
-          background: 'var(--chip-bg)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-        }}>
+      {/* ── Content column ────────────────────────────────────────────── */}
+      <div className="min-w-0">
+
+        {/* Mobile hero image */}
+        <div className="flex md:hidden items-center justify-center h-[300px] border-b border-border overflow-hidden relative"
+          style={{ background: 'var(--chip-bg)' }}>
           <img
             src={perfume.imageUrls[0]}
             alt={`${perfume.brand} ${perfume.name}`}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              objectPosition: 'center',
-              padding: '2rem',
-            }}
+            className="h-full w-auto max-w-[80%] object-contain p-4"
           />
         </div>
 
-        {/* Info column */}
-        <div style={{ padding: '3rem 3.5rem 3rem 3rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        {/* Identity block */}
+        <div className="px-4 py-5 md:px-10 md:py-8 border-b border-border">
 
-          {/* Back */}
           <Link
             href="/"
-            style={{ fontSize: '0.72rem', color: 'var(--muted-foreground)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', letterSpacing: '0.04em' }}
+            className="text-[0.75rem] text-muted-foreground no-underline tracking-wide inline-flex items-center py-2 -ml-0.5 mb-4"
           >
             ← all perfumes
           </Link>
 
           {/* Brand + name */}
-          <div>
-            <p style={{ fontSize: '0.72rem', color: 'var(--muted-foreground)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
-              {perfume.brand}
-            </p>
-            <h1 style={{ fontSize: '2rem', fontWeight: 400, margin: 0, lineHeight: 1.15, letterSpacing: '-0.01em' }}>
-              {perfume.name}
-            </h1>
-          </div>
-
-          {/* Description */}
-          <p style={{ fontSize: '1rem', fontStyle: 'italic', color: 'var(--muted-foreground)', margin: 0, lineHeight: 1.6, maxWidth: '36rem' }}>
+          <p className="text-[0.68rem] text-muted-foreground tracking-[0.12em] uppercase mb-1">
+            {perfume.brand}
+          </p>
+          <h1 className="text-[1.4rem] md:text-[1.75rem] font-normal mb-3 leading-tight tracking-tight">
+            {perfume.name}
+          </h1>
+          <p className="text-[0.9rem] italic text-muted-foreground mb-5 leading-relaxed">
             &ldquo;{perfume.description}&rdquo;
           </p>
 
           {/* Tags + accords */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div className="flex flex-wrap gap-1.5 mb-6">
             {perfume.tags.map(t => (
-              <Badge key={t} variant="default" className="text-xs h-auto py-1 px-3 rounded-sm font-normal">
+              <Badge key={t} variant="default" className="text-[0.68rem] h-auto py-0.5 px-2.5 rounded-sm font-normal">
                 {t}
               </Badge>
             ))}
             {perfume.accords.map(a => (
-              <Badge key={a} variant="outline" className="text-xs h-auto py-1 px-3 rounded-sm font-normal">
+              <Badge key={a} variant="outline" className="text-[0.68rem] h-auto py-0.5 px-2.5 rounded-sm font-normal">
                 {a}
               </Badge>
             ))}
           </div>
 
-          <Separator />
-
-          {/* Score bars — all 5 */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {/* Score bars */}
+          <div className="flex flex-col gap-2.5 mb-6">
             {(Object.keys(perfume.scores) as (keyof ScoreVector)[]).map(key => {
               const pct = Math.round(perfume.scores[key] * 100)
               const avgPct = Math.round(avgScores[key] * 100)
               return (
-                <div key={key} style={{ display: 'grid', gridTemplateColumns: '5.5rem 1fr 2.5rem', gap: '0.75rem', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--muted-foreground)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <div key={key} className="grid gap-2 items-center" style={{ gridTemplateColumns: '5.5rem 1fr 2.5rem' }}>
+                  <span className="text-[0.62rem] text-muted-foreground uppercase tracking-wider">
                     {key}
                   </span>
-                  <div style={{ position: 'relative', height: '3px', background: 'var(--border)', borderRadius: '2px' }}>
-                    {/* avg marker */}
-                    <div style={{
-                      position: 'absolute', top: '-3px', width: '1px', height: '9px',
-                      background: 'var(--muted-foreground)', opacity: 0.35,
-                      left: `${avgPct}%`,
-                    }} />
-                    <div style={{
-                      position: 'absolute', left: 0, top: 0, height: '100%',
-                      width: `${pct}%`,
-                      background: 'var(--foreground)',
-                      borderRadius: '2px',
-                    }} />
+                  <div className="relative h-0.5 rounded-sm" style={{ background: 'var(--border)' }}>
+                    <div className="absolute top-[-3px] w-px h-2 opacity-30" style={{ background: 'var(--muted-foreground)', left: `${avgPct}%` }} />
+                    <div className="absolute left-0 top-0 h-full rounded-sm" style={{ width: `${pct}%`, background: 'var(--foreground)' }} />
                   </div>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--muted-foreground)', textAlign: 'right' }}>
-                    {pct}%
-                  </span>
+                  <span className="text-[0.62rem] text-muted-foreground text-right">{pct}%</span>
                 </div>
               )
             })}
-            <p style={{ fontSize: '0.62rem', color: 'var(--muted-foreground)', margin: '0.25rem 0 0', opacity: 0.65 }}>
+            <p className="text-[0.58rem] text-muted-foreground opacity-55 mt-0.5">
               grey tick = catalogue average
             </p>
           </div>
 
-          <Separator />
-
           {/* Price + provenance */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+          <div className="flex gap-8 flex-wrap">
             {perfume.price && (
               <div>
-                <p style={{ fontSize: '0.58rem', color: 'var(--muted-foreground)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.2rem' }}>Price</p>
-                <p style={{ fontSize: '1.35rem', fontWeight: 400, margin: 0 }}>${perfume.price}</p>
+                <p className="text-[0.55rem] text-muted-foreground uppercase tracking-widest mb-0.5">Price</p>
+                <p className="text-lg font-normal m-0">${perfume.price}</p>
               </div>
             )}
             {perfume.geo?.perfumer && (
               <div>
-                <p style={{ fontSize: '0.58rem', color: 'var(--muted-foreground)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.2rem' }}>Perfumer</p>
-                <p style={{ fontSize: '0.88rem', margin: 0 }}>{perfume.geo.perfumer}</p>
+                <p className="text-[0.55rem] text-muted-foreground uppercase tracking-widest mb-0.5">Perfumer</p>
+                <p className="text-[0.82rem] m-0">{perfume.geo.perfumer}</p>
               </div>
             )}
             {perfume.geo?.country && (
               <div>
-                <p style={{ fontSize: '0.58rem', color: 'var(--muted-foreground)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.2rem' }}>Origin</p>
-                <p style={{ fontSize: '0.88rem', margin: 0 }}>{perfume.geo.country}</p>
+                <p className="text-[0.55rem] text-muted-foreground uppercase tracking-widest mb-0.5">Origin</p>
+                <p className="text-[0.82rem] m-0">{perfume.geo.country}</p>
               </div>
             )}
           </div>
 
         </div>
-      </div>
 
-      {/* ── Content sections ──────────────────────────────────────────── */}
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '4rem 3rem' }}>
+        {/* ── Detail grid: 1-col mobile → 3-col desktop ─────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 border-b border-border">
 
-        {/* 3-column grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '3rem', alignItems: 'start', marginBottom: '4rem' }}>
-
-          {/* Dimensions radar */}
-          <section>
+          <section className="p-6 md:p-7 border-b md:border-b-0 md:border-r border-border">
             <SectionTitle>Dimensions</SectionTitle>
             <ScoreRadar scores={perfume.scores} avgScores={avgScores} />
           </section>
 
-          {/* Note DNA */}
-          <section>
+          <section className="p-6 md:p-7 border-b md:border-b-0 md:border-r border-border">
             <SectionTitle>Note DNA</SectionTitle>
             <NoteCloud notes={perfume.notes} />
-            <p style={{ marginTop: '1.25rem', fontSize: '0.65rem', color: 'var(--muted-foreground)', fontStyle: 'italic', lineHeight: 1.5 }}>
-              Larger = more prominent. Hover for descriptor. Order reflects typical prominence in the fragrance.
+            <p className="mt-4 text-[0.6rem] text-muted-foreground italic leading-relaxed">
+              Larger = more prominent · hover for descriptor
             </p>
           </section>
 
-          {/* Community signal */}
-          <section>
+          <section className="p-6 md:p-7">
             <SectionTitle>Community Signal</SectionTitle>
             <CommunitySignal perfume={perfume} all={perfumes} />
           </section>
 
         </div>
 
-        <Separator style={{ marginBottom: '3.5rem' }} />
-
-        {/* Similar vibes */}
-        <section>
+        {/* ── Similar vibes ─────────────────────────────────────────── */}
+        <div className="p-6 md:p-7 pb-12">
           <SectionTitle>if you like this, try —</SectionTitle>
-          <ScrollArea className="w-full">
-            <div style={{ display: 'flex', gap: '1rem', paddingBottom: '1rem' }}>
+          <div className="product-similar-scroll">
+            <div className="flex gap-3">
               {similar.map(p => (
-                <div key={p.id} style={{ width: '200px', flexShrink: 0 }}>
+                <div key={p.id} className="similar-card">
                   <ProductCard perfume={p} />
                 </div>
               ))}
             </div>
-          </ScrollArea>
-        </section>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -225,14 +184,7 @@ export default async function ProductPage({ params }: Props) {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <p style={{
-      fontSize: '0.62rem',
-      letterSpacing: '0.12em',
-      textTransform: 'uppercase',
-      color: 'var(--muted-foreground)',
-      marginBottom: '1.5rem',
-      marginTop: 0,
-    }}>
+    <p className="text-[0.58rem] tracking-[0.12em] uppercase text-muted-foreground mb-5 mt-0">
       {children}
     </p>
   )

@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { FilterPanel } from '../components/FilterPanel'
+import { MobileFilterSheet } from '../components/MobileFilterSheet'
 import { ProductCard } from '../components/ProductCard'
 import { SearchBar } from '../components/SearchBar'
 import { perfumes, ALL_ACCORDS, ALL_TAGS } from '../data/perfumes'
@@ -29,6 +30,7 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
 export default function ListingPage() {
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS)
   const [floated, setFloated] = useState(false)
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
   const results = useMemo(
     () => filterProducts(perfumes, filters, ALL_ACCORDS, ALL_TAGS),
@@ -71,7 +73,7 @@ export default function ListingPage() {
         onToggleFloat={() => setFloated(f => !f)}
       />
 
-      <main style={{ flex: 1, padding: '1.5rem 2rem 6rem', overflowY: 'auto', ...(floated && { paddingLeft: '116px' }) }}>
+      <main className="catalog-main" style={{ flex: 1, padding: '1.5rem 2rem 6rem', overflowY: 'auto', ...(floated && { paddingLeft: '116px' }) }}>
 
         {/* Status + active filter chips */}
         <div
@@ -119,6 +121,7 @@ export default function ListingPage() {
         {/* Grid */}
         {results.length > 0 ? (
           <div
+            className="catalog-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
@@ -145,6 +148,35 @@ export default function ListingPage() {
       </main>
 
       <SearchBar
+        filters={filters}
+        onChange={setFilters}
+        allAccords={ALL_ACCORDS}
+        allTags={ALL_TAGS}
+      />
+
+      {/* Mobile filter button — hidden on desktop */}
+      <button
+        className="mobile-filter-fab"
+        onClick={() => setMobileFiltersOpen(true)}
+      >
+        <span style={{ fontSize: '0.72rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+          Filters
+        </span>
+        {hasActiveFilters && (
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            background: 'var(--foreground)', color: 'var(--background)',
+            borderRadius: '100px', width: '1.1rem', height: '1.1rem',
+            fontSize: '0.58rem', marginLeft: '0.35rem',
+          }}>
+            {filters.tags.length + filters.accords.length + activeSliderKeys.length + (filters.rating > 0 ? 1 : 0)}
+          </span>
+        )}
+      </button>
+
+      <MobileFilterSheet
+        open={mobileFiltersOpen}
+        onClose={() => setMobileFiltersOpen(false)}
         filters={filters}
         onChange={setFilters}
         allAccords={ALL_ACCORDS}

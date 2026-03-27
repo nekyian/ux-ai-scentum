@@ -49,10 +49,10 @@ export function ScoreRadar({ scores, avgScores }: Props) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
       <svg
-        width={SIZE}
-        height={SIZE}
+        width="100%"
+        height="auto"
         viewBox={`0 0 ${SIZE} ${SIZE}`}
-        style={{ overflow: 'visible' }}
+        style={{ overflow: 'hidden', maxWidth: SIZE }}
       >
         {/* Grid rings */}
         {[0.25, 0.5, 0.75, 1].map(f => (
@@ -174,7 +174,7 @@ export function ScoreRadar({ scores, avgScores }: Props) {
               <div style={{ position: 'relative', height: '3px', background: 'var(--border)', borderRadius: '2px' }}>
                 <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: 'var(--foreground)', borderRadius: '2px', transition: 'width 0.4s ease' }} />
               </div>
-              <span style={{ fontSize: '0.65rem', color: 'var(--muted-foreground)', whiteSpace: 'nowrap', minWidth: '3.5rem', textAlign: 'right' }}>
+              <span style={{ fontSize: '0.65rem', color: 'var(--muted-foreground)', whiteSpace: 'nowrap', minWidth: '2.5rem', textAlign: 'right' }}>
                 {interpretation}
               </span>
             </div>

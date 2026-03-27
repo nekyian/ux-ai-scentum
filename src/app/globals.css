@@ -90,6 +90,7 @@
 
 html {
   font-size: 15px;
+  overflow-x: hidden;
 }
 
 body {
@@ -97,6 +98,7 @@ body {
   color: var(--foreground);
   font-family: 'Georgia', 'Times New Roman', serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* ── Scrollbar ───────────────────────────────────────────────────────────── */
@@ -137,6 +139,96 @@ input[type='range']::-webkit-slider-thumb {
 
 input[type='range']::-webkit-slider-thumb:hover {
   transform: scale(1.2);
+}
+
+/* ── Product page ────────────────────────────────────────────────────────── */
+
+/* Similar row — native horizontal scroll */
+.product-similar-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.75rem;
+}
+
+.product-similar-scroll::-webkit-scrollbar { height: 3px; }
+.product-similar-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* Card widths in similar row */
+.similar-card {
+  width: 180px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 767px) {
+  .similar-card { width: 155px; }
+
+  /* Hide SVG axis labels — dimension rows below already label each axis */
+  .grid svg text { display: none; }
+}
+
+/* ── Catalog page responsive ─────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  /* Hide the docked filter sidebar — search bar handles filtering on mobile */
+  .catalog-sidebar {
+    display: none !important;
+  }
+
+  /* Full-width main area */
+  .catalog-main {
+    padding: 1rem 0.875rem 7rem !important;
+    padding-left: 0.875rem !important;
+  }
+
+  /* Single column on mobile */
+  .catalog-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+}
+
+/* ── Mobile filter FAB ───────────────────────────────────────────────────── */
+
+/* Hidden on desktop */
+.mobile-filter-fab {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .mobile-filter-fab {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    bottom: 2rem;
+    left: 1rem;
+    z-index: 200;
+    background: var(--bg-float);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    border: 2px solid var(--border);
+    border-radius: 100px;
+    padding: 0.85rem 1.25rem;
+    cursor: pointer;
+    color: var(--foreground);
+    font-family: inherit;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.13), 0 2px 0 var(--border);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+  }
+
+  .mobile-filter-fab:active {
+    transform: scale(0.96);
+  }
+}
+
+/* ── Nav responsive ──────────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  header {
+    padding: 0 1rem !important;
+  }
 }
 
 /* ── shadcn layer overrides ──────────────────────────────────────────────── */

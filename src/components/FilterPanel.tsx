@@ -260,6 +260,7 @@ export function FilterPanel({ filters, onChange, allAccords, allTags, floated, o
   // ── Docked: standard sidebar ─────────────────────────────────────────────
   return (
     <aside
+      className="catalog-sidebar"
       style={{
         width: '220px',
         flexShrink: 0,

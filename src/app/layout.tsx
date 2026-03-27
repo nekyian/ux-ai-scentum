@@ -1,4 +1,5 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
+import Link from 'next/link'
 import './globals.css'
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -10,6 +11,11 @@ const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 export const metadata: Metadata = {
   title: 'Scentum',
   description: 'A taste engine disguised as a shop.',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -31,9 +37,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               zIndex: 10,
             }}
           >
-            <span style={{ fontSize: '1.1rem', letterSpacing: '0.15em', fontStyle: 'italic' }}>
+            <Link href="/" style={{ fontSize: '1.1rem', letterSpacing: '0.15em', fontStyle: 'italic', textDecoration: 'none', color: 'inherit' }}>
               scentum
-            </span>
+            </Link>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <span style={{ fontSize: '0.75rem', color: 'var(--muted-foreground)', letterSpacing: '0.08em' }}>
                 taste engine

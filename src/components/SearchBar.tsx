@@ -74,7 +74,7 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
     >
       {/* Recognized token chips */}
       {recognizedChips.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 justify-center max-w-[500px] pointer-events-auto">
+        <div className="flex flex-wrap gap-1.5 justify-center pointer-events-auto" style={{ maxWidth: 'min(500px, calc(100vw - 2rem))' }}>
           {recognizedChips.map((chip, i) => (
             <Badge
               key={i}
@@ -113,7 +113,7 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
           border: '2px solid var(--border)',
           borderRadius: '100px',
           padding: '0.85rem 1.1rem 0.85rem 1.4rem',
-          width: '560px',
+          width: 'min(560px, calc(100vw - 2rem))',
           boxShadow: '0 12px 40px rgba(0,0,0,0.13), 0 2px 0 var(--border)',
         }}
       >
