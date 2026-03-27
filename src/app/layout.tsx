@@ -9,8 +9,20 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://scentum.space'),
   title: 'Scentum',
   description: 'A taste engine disguised as a shop.',
+  alternates: {
+    canonical: 'https://scentum.space',
+  },
+  openGraph: {
+    title: 'Scentum',
+    description: 'A taste engine disguised as a shop.',
+    url: 'https://scentum.space',
+    siteName: 'Scentum',
+    locale: 'en_US',
+    type: 'website',
+  },
 }
 
 export const viewport: Viewport = {
