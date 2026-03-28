@@ -22,10 +22,13 @@ export async function POST(req: NextRequest) {
     }
 
     if (!process.env.ANTHROPIC_API_KEY) {
-      return NextResponse.json({
-        answer: 'AI search is not configured — add ANTHROPIC_API_KEY to .env.local and restart the dev server.',
-        perfumes: matches,
-      })
+      if (process.env.NODE_ENV === 'development') {
+        return NextResponse.json({
+          answer: 'AI search is not configured — add ANTHROPIC_API_KEY to .env.local and restart the dev server.',
+          perfumes: matches,
+        })
+      }
+      return NextResponse.json({ answer: '', perfumes: matches })
     }
 
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })

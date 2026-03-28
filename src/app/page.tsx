@@ -146,8 +146,8 @@ export default function ListingPage() {
           )}
         </div>
 
-        {/* AI result panel */}
-        {isAIMode && (
+        {/* AI result panel — only render when there's prose or we're still loading */}
+        {isAIMode && (aiLoading || !!aiResult?.answer) && (
           <AISearchResult
             query={aiResult?.query ?? ''}
             answer={aiResult?.answer ?? ''}
