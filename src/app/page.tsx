@@ -5,10 +5,11 @@ import { FilterPanel } from '../components/FilterPanel'
 import { MobileFilterSheet } from '../components/MobileFilterSheet'
 import { ProductCard } from '../components/ProductCard'
 import { SearchBar } from '../components/SearchBar'
+import { AISearchResult } from '../components/AISearchResult'
 import { perfumes, ALL_ACCORDS, ALL_TAGS } from '../data/perfumes'
 import { filterProducts, DEFAULT_FILTERS } from '../lib/filter'
 import { Badge } from '../components/ui/badge'
-import type { FilterState, ScoreVector } from '../types'
+import type { FilterState, Perfume, ScoreVector } from '../types'
 
 function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
@@ -31,11 +32,35 @@ export default function ListingPage() {
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS)
   const [floated, setFloated] = useState(false)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [aiResult, setAiResult] = useState<{ query: string; answer: string; perfumes: Perfume[] } | null>(null)
+  const [aiLoading, setAiLoading] = useState(false)
+
+  async function handleAISearch(query: string) {
+    setFilters(f => ({ ...f, query: '' }))
+    setAiResult({ query, answer: '', perfumes: [] })
+    setAiLoading(true)
+    try {
+      const res = await fetch('/api/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query }),
+      })
+      const data = await res.json()
+      setAiResult({ query, answer: data.answer || 'No response from AI.', perfumes: data.perfumes ?? [] })
+    } catch {
+      setAiResult({ query, answer: 'Something went wrong — please try again.', perfumes: [] })
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   const results = useMemo(
     () => filterProducts(perfumes, filters, ALL_ACCORDS, ALL_TAGS),
     [filters]
   )
+
+  const isAIMode = aiLoading || aiResult !== null
+  const displayedProducts = isAIMode ? (aiResult?.perfumes ?? []) : results
 
   function removeTag(t: string) {
     setFilters({ ...filters, tags: filters.tags.filter(x => x !== t) })
@@ -87,9 +112,12 @@ export default function ListingPage() {
           }}
         >
           <span style={{ fontSize: '0.72rem', color: 'var(--muted-foreground)', marginRight: '0.25rem', flexShrink: 0 }}>
-            {results.length} {results.length === 1 ? 'perfume' : 'perfumes'}
-            {results.length < perfumes.length && (
+            {displayedProducts.length} {displayedProducts.length === 1 ? 'perfume' : 'perfumes'}
+            {!isAIMode && results.length < perfumes.length && (
               <span style={{ fontStyle: 'italic' }}> · filtered from {perfumes.length}</span>
+            )}
+            {isAIMode && !aiLoading && (
+              <span style={{ fontStyle: 'italic' }}> · AI results</span>
             )}
           </span>
 
@@ -118,8 +146,19 @@ export default function ListingPage() {
           )}
         </div>
 
+        {/* AI result panel */}
+        {isAIMode && (
+          <AISearchResult
+            query={aiResult?.query ?? ''}
+            answer={aiResult?.answer ?? ''}
+            count={aiResult?.perfumes.length ?? 0}
+            loading={aiLoading}
+            onDismiss={() => setAiResult(null)}
+          />
+        )}
+
         {/* Grid */}
-        {results.length > 0 ? (
+        {displayedProducts.length > 0 ? (
           <div
             className="catalog-grid"
             style={{
@@ -128,7 +167,7 @@ export default function ListingPage() {
               gap: '1rem',
             }}
           >
-            {results.map(p => (
+            {displayedProducts.map(p => (
               <ProductCard key={p.id} perfume={p} />
             ))}
           </div>
@@ -142,7 +181,7 @@ export default function ListingPage() {
               fontStyle: 'italic',
             }}
           >
-            nothing matches — try softening the filters
+            {isAIMode ? 'thinking…' : 'nothing matches — try softening the filters'}
           </div>
         )}
       </main>
@@ -152,6 +191,7 @@ export default function ListingPage() {
         onChange={setFilters}
         allAccords={ALL_ACCORDS}
         allTags={ALL_TAGS}
+        onSearch={handleAISearch}
       />
 
       {/* Mobile filter button — hidden on desktop */}

@@ -11,6 +11,7 @@ type Props = {
   onChange: (f: FilterState) => void
   allAccords: string[]
   allTags: string[]
+  onSearch?: (query: string) => void
 }
 
 const SCORE_LABELS: Record<keyof ScoreVector, string> = {
@@ -36,7 +37,7 @@ function removeToken(query: string, token: string): string {
     .trim()
 }
 
-export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
+export function SearchBar({ filters, onChange, allAccords, allTags, onSearch }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const parsed = useMemo(
@@ -123,9 +124,23 @@ export function SearchBar({ filters, onChange, allAccords, allTags }: Props) {
           type="text"
           value={filters.query}
           onChange={e => onChange({ ...filters, query: e.target.value })}
+          onKeyDown={e => {
+            if (e.key === 'Enter' && filters.query.trim() && onSearch) {
+              onSearch(filters.query.trim())
+            }
+          }}
           placeholder="woody · romantic · Chanel · lasting..."
           className="flex-1 bg-transparent border-none outline-none text-[0.95rem] text-foreground font-[inherit] tracking-[0.02em] placeholder:text-muted-foreground"
         />
+        {hasQuery && onSearch && (
+          <button
+            onClick={() => onSearch(filters.query.trim())}
+            className="text-[0.58rem] tracking-widest uppercase shrink-0 px-2 py-0.5 rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-foreground bg-transparent cursor-pointer transition-colors font-[inherit]"
+            style={{ letterSpacing: '0.08em' }}
+          >
+            ask AI ↵
+          </button>
+        )}
         {hasQuery && (
           <button
             onClick={() => onChange({ ...filters, query: '' })}

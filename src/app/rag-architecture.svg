@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500" font-family="Georgia, serif">
+
+  <defs>
+    <!-- Dark arrowhead (runtime) -->
+    <marker id="arrow-dark" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#1a1714"/>
+    </marker>
+
+    <!-- Gold arrowhead (build-time) -->
+    <marker id="arrow-gold" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#c4a882"/>
+    </marker>
+
+    <!-- Accent arrowhead (LLM pipeline) -->
+    <marker id="arrow-accent" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#8b6f52"/>
+    </marker>
+
+    <!-- Muted arrowhead (load label) -->
+    <marker id="arrow-muted" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7a736b"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="500" fill="#f5f2ed"/>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- LANE 1: BUILD TIME  y=62–158 -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <rect x="30" y="62" width="840" height="96" rx="4"
+        fill="none" stroke="#c4a882" stroke-width="1" stroke-dasharray="6 4"/>
+  <text x="46" y="58" font-size="10" fill="#c4a882" letter-spacing="1.5" font-style="normal">BUILD TIME</text>
+
+  <!-- Box 1: perfumes.ts  x=60 -->
+  <rect x="60" y="80" width="140" height="54" rx="4" fill="#faf8f5" stroke="#e0dbd3" stroke-width="1"/>
+  <text x="130" y="103" text-anchor="middle" font-size="13" fill="#1a1714">perfumes.ts</text>
+  <text x="130" y="120" text-anchor="middle" font-size="10" fill="#7a736b">100 documents</text>
+
+  <!-- Box 2: Lunr Builder  x=240 -->
+  <rect x="240" y="80" width="140" height="54" rx="4" fill="#faf8f5" stroke="#e0dbd3" stroke-width="1"/>
+  <text x="310" y="103" text-anchor="middle" font-size="13" fill="#1a1714">Lunr Builder</text>
+  <text x="310" y="120" text-anchor="middle" font-size="10" fill="#7a736b">BM25 · field boosts</text>
+
+  <!-- Box 3: index.json  x=430 -->
+  <rect x="430" y="80" width="140" height="54" rx="4" fill="#faf8f5" stroke="#e0dbd3" stroke-width="1"/>
+  <text x="500" y="103" text-anchor="middle" font-size="13" fill="#1a1714">index.json</text>
+  <text x="500" y="120" text-anchor="middle" font-size="10" fill="#7a736b">serialized index</text>
+
+  <!-- Lane 1 arrows (dashed gold) -->
+  <!-- perfumes.ts → Lunr Builder -->
+  <line x1="200" y1="107" x2="238" y2="107"
+        stroke="#c4a882" stroke-width="1.5" stroke-dasharray="5 3"
+        marker-end="url(#arrow-gold)"/>
+  <!-- Lunr Builder → index.json -->
+  <line x1="380" y1="107" x2="428" y2="107"
+        stroke="#c4a882" stroke-width="1.5" stroke-dasharray="5 3"
+        marker-end="url(#arrow-gold)"/>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- LANE 2: QUERY  y=192–288 -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <text x="46" y="192" font-size="10" fill="#7a736b" letter-spacing="1.5">QUERY</text>
+
+  <!-- Box 1: User Query  x=60 (dark fill) -->
+  <rect x="60" y="202" width="140" height="54" rx="4" fill="#1a1714" stroke="#1a1714" stroke-width="1"/>
+  <text x="130" y="225" text-anchor="middle" font-size="13" fill="#f5f2ed">User Query</text>
+  <text x="130" y="242" text-anchor="middle" font-size="10" fill="#c4a882">warm, sensual, evening</text>
+
+  <!-- Box 2: Lunr Search  x=230 -->
+  <rect x="230" y="202" width="140" height="54" rx="4" fill="#faf8f5" stroke="#e0dbd3" stroke-width="1"/>
+  <text x="300" y="225" text-anchor="middle" font-size="13" fill="#1a1714">Lunr Search</text>
+  <text x="300" y="242" text-anchor="middle" font-size="10" fill="#7a736b">client-side</text>
+
+  <!-- Box 3: Top-K Results  x=400 -->
+  <rect x="400" y="202" width="140" height="54" rx="4" fill="#faf8f5" stroke="#e0dbd3" stroke-width="1"/>
+  <text x="470" y="225" text-anchor="middle" font-size="13" fill="#1a1714">Top-K Results</text>
+  <text x="470" y="242" text-anchor="middle" font-size="10" fill="#7a736b">5 best matches</text>
+
+  <!-- Box 4: Prompt Builder  x=570 -->
+  <rect x="570" y="202" width="140" height="54" rx="4" fill="#faf8f5" stroke="#e0dbd3" stroke-width="1"/>
+  <text x="640" y="225" text-anchor="middle" font-size="13" fill="#1a1714">Prompt Builder</text>
+  <text x="640" y="242" text-anchor="middle" font-size="10" fill="#7a736b">query + context</text>
+
+  <!-- Lane 2 arrows (solid dark) -->
+  <!-- User Query → Lunr Search -->
+  <line x1="200" y1="229" x2="228" y2="229"
+        stroke="#1a1714" stroke-width="1.5"
+        marker-end="url(#arrow-dark)"/>
+  <!-- Lunr Search → Top-K Results -->
+  <line x1="370" y1="229" x2="398" y2="229"
+        stroke="#1a1714" stroke-width="1.5"
+        marker-end="url(#arrow-dark)"/>
+  <!-- Top-K Results → Prompt Builder -->
+  <line x1="540" y1="229" x2="568" y2="229"
+        stroke="#1a1714" stroke-width="1.5"
+        marker-end="url(#arrow-dark)"/>
+
+  <!-- Curved dotted arrow: User Query → Prompt Builder (raw query, below the row) -->
+  <path d="M 130 256 C 130 298, 640 298, 640 258"
+        fill="none" stroke="#1a1714" stroke-width="1.2" stroke-dasharray="4 3"
+        marker-end="url(#arrow-dark)"/>
+  <text x="385" y="310" text-anchor="middle" font-size="10" fill="#7a736b">raw query</text>
+
+  <!-- Dashed arrow: index.json (lane 1) → Lunr Search (lane 2) labelled "load" -->
+  <!-- index.json bottom-center: x=500, y=134  →  Lunr Search top-center: x=300, y=202 -->
+  <path d="M 500 134 L 500 168 L 300 168 L 300 200"
+        fill="none" stroke="#7a736b" stroke-width="1.2" stroke-dasharray="4 3"
+        marker-end="url(#arrow-muted)"/>
+  <text x="408" y="163" text-anchor="middle" font-size="10" fill="#7a736b">load</text>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- LANE 3: GENERATE  y=340–430 -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <text x="46" y="340" font-size="10" fill="#7a736b" letter-spacing="1.5">GENERATE</text>
+
+  <!-- Box 1: /api/search  x=230 -->
+  <rect x="230" y="350" width="140" height="54" rx="4" fill="#faf8f5" stroke="#e0dbd3" stroke-width="1"/>
+  <text x="300" y="370" text-anchor="middle" font-size="13" fill="#1a1714">/api/search</text>
+  <text x="300" y="386" text-anchor="middle" font-size="10" fill="#7a736b">Next.js route</text>
+  <text x="300" y="398" text-anchor="middle" font-size="9" fill="#7a736b">server · hides API key</text>
+
+  <!-- Box 2: Claude API  x=430 (accent fill) -->
+  <rect x="430" y="350" width="140" height="54" rx="4" fill="#8b6f52" stroke="#8b6f52" stroke-width="1"/>
+  <text x="500" y="373" text-anchor="middle" font-size="13" fill="#f5f2ed">Claude API</text>
+  <text x="500" y="390" text-anchor="middle" font-size="10" fill="#f5f2ed" opacity="0.8">claude-sonnet-4-6</text>
+
+  <!-- Box 3: Search UI  x=620, wider (180px) -->
+  <rect x="620" y="350" width="180" height="54" rx="4" fill="#faf8f5" stroke="#e0dbd3" stroke-width="1"/>
+  <text x="710" y="373" text-anchor="middle" font-size="13" fill="#1a1714">Search UI</text>
+  <text x="710" y="390" text-anchor="middle" font-size="10" fill="#7a736b">AI prose · ranked cards</text>
+
+  <!-- Lane 3 arrows (solid accent) -->
+  <!-- /api/search → Claude API -->
+  <line x1="370" y1="377" x2="428" y2="377"
+        stroke="#8b6f52" stroke-width="1.5"
+        marker-end="url(#arrow-accent)"/>
+  <!-- Claude API → Search UI -->
+  <line x1="570" y1="377" x2="618" y2="377"
+        stroke="#8b6f52" stroke-width="1.5"
+        marker-end="url(#arrow-accent)"/>
+
+  <!-- Vertical arrow: Prompt Builder (lane 2) → /api/search (lane 3) -->
+  <!-- Prompt Builder bottom: x=640, y=256  →  /api/search top: x=300, y=350 -->
+  <path d="M 640 256 L 640 320 L 300 320 L 300 348"
+        fill="none" stroke="#1a1714" stroke-width="1.5"
+        marker-end="url(#arrow-dark)"/>
+
+  <!-- Dashed vertical arrow: Top-K Results (lane 2) → Search UI (lane 3) labelled "perfume data" -->
+  <!-- Top-K Results bottom: x=470, y=256  →  Search UI top: x=710, y=350 -->
+  <path d="M 470 256 L 470 328 L 710 328 L 710 348"
+        fill="none" stroke="#8b6f52" stroke-width="1.2" stroke-dasharray="4 3"
+        marker-end="url(#arrow-accent)"/>
+  <text x="604" y="322" text-anchor="middle" font-size="10" fill="#7a736b">perfume data</text>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- LEGEND  y=460 -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <g transform="translate(196, 458)">
+    <!-- build-time -->
+    <line x1="0" y1="6" x2="28" y2="6" stroke="#c4a882" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <circle cx="14" cy="6" r="0" fill="none"/>
+    <text x="34" y="10" font-size="10" fill="#7a736b">build-time</text>
+
+    <!-- runtime -->
+    <line x1="130" y1="6" x2="158" y2="6" stroke="#1a1714" stroke-width="1.5"/>
+    <text x="164" y="10" font-size="10" fill="#7a736b">runtime</text>
+
+    <!-- LLM pipeline -->
+    <line x1="240" y1="6" x2="268" y2="6" stroke="#8b6f52" stroke-width="1.5"/>
+    <text x="274" y="10" font-size="10" fill="#7a736b">LLM pipeline</text>
+  </g>
+
+</svg>

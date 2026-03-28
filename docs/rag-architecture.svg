@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="520"
+     viewBox="0 0 920 520" font-family="Georgia, 'Times New Roman', serif">
+
+  <defs>
+    <marker id="arr" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#1a1714"/>
+    </marker>
+    <marker id="arr-accent" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#8b6f52"/>
+    </marker>
+    <marker id="arr-muted" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#7a736b"/>
+    </marker>
+    <marker id="arr-gold" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#c4a882"/>
+    </marker>
+  </defs>
+
+  <!-- ── Page background ───────────────────────────────────────────── -->
+  <rect width="920" height="520" fill="#f5f2ed"/>
+
+  <!-- ── Title ─────────────────────────────────────────────────────── -->
+  <text x="460" y="26" text-anchor="middle" font-size="13" fill="#1a1714" letter-spacing="0.12em">
+    SCENTUM · RAG SEARCH ARCHITECTURE
+  </text>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SWIMLANE: BROWSER   y=42 → 152
+  ══════════════════════════════════════════════════════════════════════ -->
+  <rect x="16" y="42" width="888" height="112" rx="5"
+        fill="#faf8f5" stroke="#e0dbd3" stroke-width="1"/>
+  <text x="28" y="57" font-size="8.5" fill="#7a736b" letter-spacing="1.8">BROWSER</text>
+
+  <!-- SearchBar.tsx -->
+  <rect x="50" y="64" width="148" height="62" rx="4"
+        fill="#1a1714" stroke="#1a1714"/>
+  <text x="124" y="89" text-anchor="middle" font-size="12" fill="#f5f2ed">SearchBar.tsx</text>
+  <text x="124" y="106" text-anchor="middle" font-size="9" fill="#c4a882">Enter · ask AI ↵</text>
+  <text x="124" y="119" text-anchor="middle" font-size="8.5" fill="#c4a882" opacity="0.75">query string</text>
+
+  <!-- AISearchResult.tsx -->
+  <rect x="706" y="64" width="178" height="62" rx="4"
+        fill="#1a1714" stroke="#1a1714"/>
+  <text x="795" y="89" text-anchor="middle" font-size="12" fill="#f5f2ed">AISearchResult.tsx</text>
+  <text x="795" y="106" text-anchor="middle" font-size="9" fill="#c4a882">AI prose · ranked cards</text>
+  <text x="795" y="119" text-anchor="middle" font-size="8.5" fill="#c4a882" opacity="0.75">dismissable panel</text>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SWIMLANE: SERVER   y=172 → 360
+  ══════════════════════════════════════════════════════════════════════ -->
+  <rect x="16" y="172" width="888" height="188" rx="5"
+        fill="#faf8f5" stroke="#e0dbd3" stroke-width="1"/>
+  <text x="28" y="187" font-size="8.5" fill="#7a736b" letter-spacing="1.8">NEXT.JS SERVER</text>
+
+  <!-- /api/search route.ts -->
+  <rect x="50" y="198" width="148" height="70" rx="4"
+        fill="#faf8f5" stroke="#e0dbd3" stroke-width="1.5"/>
+  <text x="124" y="220" text-anchor="middle" font-size="11" fill="#1a1714">/api/search</text>
+  <text x="124" y="236" text-anchor="middle" font-size="9" fill="#7a736b">route.ts</text>
+  <text x="124" y="252" text-anchor="middle" font-size="8.5" fill="#7a736b">POST handler</text>
+  <text x="124" y="263" text-anchor="middle" font-size="8" fill="#7a736b" opacity="0.8">hides ANTHROPIC_API_KEY</text>
+
+  <!-- search-index.ts (Lunr) -->
+  <rect x="272" y="198" width="158" height="70" rx="4"
+        fill="#faf8f5" stroke="#e0dbd3" stroke-width="1.5"/>
+  <text x="351" y="220" text-anchor="middle" font-size="11" fill="#1a1714">search-index.ts</text>
+  <text x="351" y="236" text-anchor="middle" font-size="9" fill="#7a736b">Lunr.js · BM25</text>
+  <text x="351" y="252" text-anchor="middle" font-size="8.5" fill="#7a736b">name 10× · brand 8×</text>
+  <text x="351" y="263" text-anchor="middle" font-size="8" fill="#7a736b" opacity="0.8">accords 6× · notes 4×</text>
+
+  <!-- perfumes.ts (data source, below Lunr) -->
+  <rect x="272" y="298" width="158" height="50" rx="4"
+        fill="#ede8e1" stroke="#d4c4b0" stroke-width="1" stroke-dasharray="5 3"/>
+  <text x="351" y="318" text-anchor="middle" font-size="11" fill="#1a1714">perfumes.ts</text>
+  <text x="351" y="334" text-anchor="middle" font-size="8.5" fill="#7a736b">catalogue · 30 documents</text>
+
+  <!-- Prompt Builder -->
+  <rect x="510" y="198" width="152" height="70" rx="4"
+        fill="#faf8f5" stroke="#e0dbd3" stroke-width="1.5"/>
+  <text x="586" y="220" text-anchor="middle" font-size="11" fill="#1a1714">Prompt Builder</text>
+  <text x="586" y="236" text-anchor="middle" font-size="9" fill="#7a736b">query + top-6 context</text>
+  <text x="586" y="252" text-anchor="middle" font-size="8.5" fill="#7a736b">brand · notes · scores</text>
+  <text x="586" y="263" text-anchor="middle" font-size="8" fill="#7a736b" opacity="0.8">Scentum persona prompt</text>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SWIMLANE: ANTHROPIC   y=378 → 468
+  ══════════════════════════════════════════════════════════════════════ -->
+  <rect x="16" y="378" width="888" height="108" rx="5"
+        fill="#faf8f5" stroke="#d4c4b0" stroke-width="1"/>
+  <text x="28" y="393" font-size="8.5" fill="#8b6f52" letter-spacing="1.8">ANTHROPIC</text>
+
+  <!-- Claude Haiku box (accent fill) -->
+  <rect x="476" y="400" width="220" height="68" rx="4"
+        fill="#8b6f52" stroke="#8b6f52"/>
+  <text x="586" y="425" text-anchor="middle" font-size="12" fill="#f5f2ed">claude-haiku-4-5</text>
+  <text x="586" y="442" text-anchor="middle" font-size="9" fill="#f5f2ed" opacity="0.85">POST /v1/messages</text>
+  <text x="586" y="455" text-anchor="middle" font-size="8.5" fill="#f5f2ed" opacity="0.75">max_tokens: 320 · streaming: off</text>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       ARROWS
+  ══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- 1. SearchBar → /api/search  (down, left column) -->
+  <path d="M 124 126 L 124 196"
+        fill="none" stroke="#1a1714" stroke-width="1.5"
+        marker-end="url(#arr)"/>
+  <text x="104" y="165" text-anchor="middle" font-size="8.5" fill="#1a1714">POST</text>
+  <text x="104" y="177" text-anchor="middle" font-size="8.5" fill="#1a1714">{ query }</text>
+
+  <!-- 2. /api/search → search-index.ts  (horizontal) -->
+  <line x1="198" y1="233" x2="270" y2="233"
+        fill="none" stroke="#1a1714" stroke-width="1.5"
+        marker-end="url(#arr)"/>
+  <text x="234" y="225" text-anchor="middle" font-size="8.5" fill="#7a736b">search</text>
+
+  <!-- 3. perfumes.ts → search-index.ts  (vertical up, data feed) -->
+  <line x1="351" y1="298" x2="351" y2="270"
+        fill="none" stroke="#7a736b" stroke-width="1.2" stroke-dasharray="4 3"
+        marker-end="url(#arr-muted)"/>
+  <text x="390" y="289" text-anchor="start" font-size="8" fill="#7a736b">catalogue</text>
+
+  <!-- 4. search-index.ts → Prompt Builder  (horizontal, carries top-6) -->
+  <line x1="430" y1="233" x2="508" y2="233"
+        fill="none" stroke="#1a1714" stroke-width="1.5"
+        marker-end="url(#arr)"/>
+  <text x="469" y="224" text-anchor="middle" font-size="8.5" fill="#7a736b">top-6</text>
+  <text x="469" y="235" text-anchor="middle" font-size="8.5" fill="#7a736b">matches</text>
+
+  <!-- 5. Prompt Builder → Claude Haiku  (vertical down) -->
+  <line x1="586" y1="268" x2="586" y2="398"
+        fill="none" stroke="#8b6f52" stroke-width="1.5"
+        marker-end="url(#arr-accent)"/>
+  <text x="614" y="340" text-anchor="start" font-size="8.5" fill="#8b6f52">prompt</text>
+  <text x="614" y="352" text-anchor="start" font-size="8.5" fill="#8b6f52">+ context</text>
+
+  <!-- 6. Claude Haiku → route.ts  (left, response prose) -->
+  <path d="M 476 434 L 198 434 L 198 270"
+        fill="none" stroke="#8b6f52" stroke-width="1.5" stroke-dasharray="5 3"
+        marker-end="url(#arr-accent)"/>
+  <text x="328" y="445" text-anchor="middle" font-size="8.5" fill="#8b6f52">{ answer }</text>
+
+  <!-- 7. route.ts → AISearchResult  (up right side → browser) -->
+  <!-- From /api/search top-right corner, go up then right to AISearchResult -->
+  <path d="M 124 198 L 124 150 L 706 150 L 706 96"
+        fill="none" stroke="#1a1714" stroke-width="1.5"
+        marker-end="url(#arr)"/>
+  <text x="450" y="144" text-anchor="middle" font-size="8.5" fill="#1a1714">{ answer, perfumes }  JSON response</text>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       LEGEND   y=490
+  ══════════════════════════════════════════════════════════════════════ -->
+  <g transform="translate(174, 492)">
+    <line x1="0" y1="6" x2="24" y2="6" stroke="#1a1714" stroke-width="1.5" marker-end="url(#arr)"/>
+    <text x="30" y="10" font-size="9" fill="#7a736b">request / response</text>
+
+    <line x1="160" y1="6" x2="184" y2="6" stroke="#8b6f52" stroke-width="1.5" marker-end="url(#arr-accent)"/>
+    <text x="190" y="10" font-size="9" fill="#7a736b">LLM pipeline</text>
+
+    <line x1="312" y1="6" x2="336" y2="6" stroke="#7a736b" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arr-muted)"/>
+    <text x="342" y="10" font-size="9" fill="#7a736b">data source</text>
+
+    <rect x="464" y="0" width="10" height="10" rx="1" fill="none" stroke="#d4c4b0" stroke-dasharray="4 3"/>
+    <text x="480" y="10" font-size="9" fill="#7a736b">static data</text>
+  </g>
+
+</svg>
